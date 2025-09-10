@@ -13,14 +13,16 @@ const DashboardLayout = () => {
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn");
     const userEmail = localStorage.getItem("userEmail");
+    const userName = localStorage.getItem("userName") || "Dr. Smith";
+    const userRole = localStorage.getItem("userRole") || "Dentist";
     
     if (!isLoggedIn) {
       navigate("/");
     } else {
       setUser({ 
         email: userEmail,
-        name: "Dr. Smith",
-        role: "Dentist",
+        name: userName,
+        role: userRole,
         avatar: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=100&h=100&fit=crop&crop=face"
       });
     }
