@@ -50,25 +50,26 @@ export const appointmentsAPI = {
     });
     
     const queryString = queryParams.toString();
-    const url = queryString ? `/appointments?${queryString}` : '/appointments';
+    const url = queryString ? `/appointments/?${queryString}` : '/appointments/';
     
+    console.log('Making API request to:', url);
     return apiClient.get(url);
   },
 
   // Get today's appointments
-  getToday: () => apiClient.get('/appointments/today'),
+  getToday: () => apiClient.get('/appointments/today/'),
 
   // Get upcoming appointments
-  getUpcoming: (days = 7) => apiClient.get(`/appointments/upcoming?days=${days}`),
+  getUpcoming: (days = 7) => apiClient.get(`/appointments/upcoming/?days=${days}`),
 
   // Get appointment statistics
-  getStats: () => apiClient.get('/appointments/stats'),
+  getStats: () => apiClient.get('/appointments/stats/'),
 
   // Trigger manual sync
-  sync: () => apiClient.post('/appointments/sync'),
+  sync: () => apiClient.post('/appointments/sync/'),
 
   // Get sync status
-  getSyncStatus: () => apiClient.get('/appointments/sync/status'),
+  getSyncStatus: () => apiClient.get('/appointments/sync/status/'),
 };
 
 // General API
