@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Query, BackgroundTasks
 from typing import List, Optional
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from ..models.appointment import Appointment, AppointmentStats, SyncResult
 from ..services.google_sheets_service import GoogleSheetsService
 from motor.motor_asyncio import AsyncIOMotorClient
