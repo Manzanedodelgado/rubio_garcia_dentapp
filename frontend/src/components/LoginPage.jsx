@@ -81,8 +81,8 @@ const LoginPage = () => {
                 <User className="h-5 w-5 text-gray-400" />
               </div>
               <Input
-                type="email"
-                placeholder="Email"
+                type="text"
+                placeholder="Usuario o Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="border-0 focus-visible:ring-0 flex-1 bg-transparent"
