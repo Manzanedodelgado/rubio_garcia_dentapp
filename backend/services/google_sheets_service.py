@@ -12,7 +12,8 @@ logger = logging.getLogger(__name__)
 class GoogleSheetsService:
     def __init__(self, db_client: AsyncIOMotorClient):
         self.db = db_client[os.environ['DB_NAME']]
-        self.sheet_url = "https://docs.google.com/spreadsheets/d/1MBDBHQ08XGuf5LxVHCFhHDagIazFkpBnxwqyEQIBJrQ/export?format=csv"
+        # Use the public CSV export URL for the Google Sheets
+        self.sheet_url = "https://docs.google.com/spreadsheets/d/1MBDBHQ08XGuf5LxVHCFhHDagIazFkpBnxwqyEQIBJrQ/export?format=csv&gid=0"
         self.last_update = None
         
     async def fetch_sheet_data(self) -> List[Dict]:
