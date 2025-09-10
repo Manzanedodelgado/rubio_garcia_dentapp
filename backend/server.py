@@ -11,9 +11,6 @@ import uuid
 from datetime import datetime
 import asyncio
 
-# Import new routers
-from .routers.appointments import router as appointments_router, start_background_sync
-
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
