@@ -39,7 +39,7 @@ const LoginPage = () => {
       } else {
         toast({
           title: "Error de Acceso",
-          description: "Credenciales incorrectas. Intenta con JMD/190582 o admin@kokuai.com/kokuai123",
+          description: "Credenciales incorrectas. Intenta con JMD/190582",
           variant: "destructive",
         });
       }
@@ -49,36 +49,33 @@ const LoginPage = () => {
 
   const handleForgotPassword = () => {
     toast({
-      title: "Password Reset",
-      description: "Password reset functionality will be available soon",
+      title: "Recuperar Contraseña",
+      description: "La funcionalidad estará disponible pronto",
     });
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md bg-white shadow-lg rounded-lg border-0 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md bg-white shadow-xl rounded-xl border-0 p-8">
         <div className="text-center mb-8">
-          {/* Kokuai Logo */}
-          <div className="mb-6">
-            <h1 className="text-4xl font-light text-emerald-500 mb-1">
-              kokuai
-              <span className="inline-flex ml-1">
-                <span className="w-2 h-2 bg-emerald-500 rounded-full mr-1"></span>
-                <span className="w-2 h-2 bg-emerald-500 rounded-full mr-1"></span>
-                <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-              </span>
-            </h1>
+          {/* Rubio García Dental Logo */}
+          <div className="mb-6 flex justify-center">
+            <img 
+              src="https://customer-assets.emergentagent.com/job_ai-hub-clone-1/artifacts/llonqh1v_IMG_0176.png" 
+              alt="Rubio García Dental" 
+              className="h-24 object-contain"
+            />
           </div>
           
-          <p className="text-gray-600 text-base mb-6">Sign in to your account</p>
+          <p className="text-slate-600 text-base mb-6">Accede a tu portal profesional</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
           {/* Email Input */}
           <div className="relative">
-            <div className="flex items-center border border-gray-300 rounded-md focus-within:border-emerald-500 focus-within:ring-1 focus-within:ring-emerald-500">
+            <div className="flex items-center border border-slate-300 rounded-lg focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100">
               <div className="pl-3 pr-2">
-                <User className="h-5 w-5 text-gray-400" />
+                <User className="h-5 w-5 text-slate-400" />
               </div>
               <Input
                 type="text"
@@ -93,13 +90,13 @@ const LoginPage = () => {
 
           {/* Password Input */}
           <div className="relative">
-            <div className="flex items-center border border-gray-300 rounded-md focus-within:border-emerald-500 focus-within:ring-1 focus-within:ring-emerald-500">
+            <div className="flex items-center border border-slate-300 rounded-lg focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100">
               <div className="pl-3 pr-2">
-                <Lock className="h-5 w-5 text-gray-400" />
+                <Lock className="h-5 w-5 text-slate-400" />
               </div>
               <Input
                 type="password"
-                placeholder="Password"
+                placeholder="Contraseña"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="border-0 focus-visible:ring-0 flex-1 bg-transparent"
@@ -113,17 +110,17 @@ const LoginPage = () => {
             <button
               type="button"
               onClick={handleForgotPassword}
-              className="text-teal-600 hover:text-teal-700 text-sm underline transition-colors"
+              className="text-blue-600 hover:text-blue-700 text-sm underline transition-colors"
             >
-              Forgot password?
+              ¿Olvidaste tu contraseña?
             </button>
             
             <Button
               type="submit"
               disabled={isLoading}
-              className="bg-teal-700 hover:bg-teal-800 text-white px-8 py-2 rounded-md transition-colors"
+              className="bg-slate-700 hover:bg-slate-800 text-white px-8 py-2 rounded-lg transition-colors"
             >
-              {isLoading ? "Signing in..." : "Login"}
+              {isLoading ? "Ingresando..." : "Ingresar"}
             </Button>
           </div>
         </form>
