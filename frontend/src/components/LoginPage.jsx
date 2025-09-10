@@ -6,6 +6,7 @@ import { Card } from "./ui/card";
 import { User, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "../hooks/use-toast";
+import { mockData } from "../data/mockData";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
