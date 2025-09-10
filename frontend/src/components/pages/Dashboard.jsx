@@ -14,12 +14,14 @@ import {
 import { mockData } from "../../data/mockData";
 
 const Dashboard = () => {
+  const userName = localStorage.getItem("userName") || "Dr. Smith";
+  
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Bienvenido de vuelta, Dr. Smith
+          Bienvenido de vuelta, {userName}
         </h1>
         <p className="text-gray-600">
           Aquí tienes un resumen de tu clínica hoy.
