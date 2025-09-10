@@ -295,9 +295,10 @@ def create_appointments_router(db_client: AsyncIOMotorClient):
             
             return appointments
         except Exception as e:
+            logger.error(f"Error in get_appointments: {str(e)}")
             raise HTTPException(status_code=500, detail=f"Error fetching appointments: {str(e)}")
 
-    @router.get("/today", response_model=List[Appointment])
+    @router.get("/today/", response_model=List[Appointment])
     async def get_today_appointments():
         """Get today's appointments"""
         today = datetime.now().strftime('%Y-%m-%d')
@@ -305,6 +306,7 @@ def create_appointments_router(db_client: AsyncIOMotorClient):
             appointments = await sheets_service.get_appointments(start_date=today, end_date=today)
             return appointments
         except Exception as e:
+            logger.error(f"Error in get_today_appointments: {str(e)}")
             raise HTTPException(status_code=500, detail=f"Error fetching today's appointments: {str(e)}")
 
     @router.get("/stats/", response_model=AppointmentStats)
@@ -360,16 +362,17 @@ def create_appointments_router(db_client: AsyncIOMotorClient):
             logger.error(f"Error fetching stats: {str(e)}")
             raise HTTPException(status_code=500, detail=f"Error fetching stats: {str(e)}")
 
-    @router.post("/sync", response_model=SyncResult)
+    @router.post("/sync/", response_model=SyncResult)
     async def sync_appointments():
         """Manually trigger sync from Google Sheets"""
         try:
             result = await sheets_service.sync_appointments()
             return SyncResult(**result)
         except Exception as e:
+            logger.error(f"Error in sync_appointments: {str(e)}")
             raise HTTPException(status_code=500, detail=f"Sync failed: {str(e)}")
 
-    @router.get("/sync/status")
+    @router.get("/sync/status/")
     async def get_sync_status():
         """Get last sync information"""
         return {
@@ -378,7 +381,7 @@ def create_appointments_router(db_client: AsyncIOMotorClient):
             "sync_interval_minutes": 5
         }
 
-    @router.get("/upcoming", response_model=List[Appointment])
+    @router.get("/upcoming/", response_model=List[Appointment])
     async def get_upcoming_appointments(days: int = Query(7, description="Number of days ahead")):
         """Get upcoming appointments for the next N days"""
         try:
@@ -399,6 +402,7 @@ def create_appointments_router(db_client: AsyncIOMotorClient):
             return upcoming
             
         except Exception as e:
+            logger.error(f"Error in get_upcoming_appointments: {str(e)}")
             raise HTTPException(status_code=500, detail=f"Error fetching upcoming appointments: {str(e)}")
     
     # Start background sync
