@@ -13,6 +13,7 @@ function App() {
           <Route path="/" element={<LoginPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
+        <Toaster />
       </BrowserRouter>
     </div>
   );
