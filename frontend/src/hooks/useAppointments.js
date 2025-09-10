@@ -8,20 +8,34 @@ export const useAppointments = (filters = {}) => {
   const [error, setError] = useState(null);
 
   const fetchAppointments = useCallback(async () => {
+    if (loading) return; // Prevent multiple simultaneous requests
+    
     setLoading(true);
     setError(null);
 
     try {
+      console.log('Fetching appointments with filters:', filters);
       const response = await appointmentsAPI.getAll(filters);
-      setAppointments(response.data);
+      console.log('Appointments response:', response.data);
+      setAppointments(response.data || []);
     } catch (err) {
+      console.error('Error fetching appointments:', err);
       const errorMessage = err.response?.data?.detail || err.message || 'Error fetching appointments';
       setError(errorMessage);
-      console.error('Error fetching appointments:', err);
+      setAppointments([]); // Set empty array on error
+      
+      // Only show toast for real errors, not loading states
+      if (err.response?.status !== 307) {
+        toast({
+          title: "Error al cargar citas",
+          description: errorMessage,
+          variant: "destructive",
+        });
+      }
     } finally {
       setLoading(false);
     }
-  }, [filters]);
+  }, [JSON.stringify(filters), loading]); // Use JSON.stringify for deep comparison
 
   useEffect(() => {
     fetchAppointments();
