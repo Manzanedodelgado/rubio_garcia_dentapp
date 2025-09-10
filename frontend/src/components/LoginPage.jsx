@@ -19,19 +19,26 @@ const LoginPage = () => {
 
     // Mock login - simulate API call
     setTimeout(() => {
-      if (email && password) {
+      // Check against mock credentials
+      const validCredentials = mockData.testCredentials.find(cred => 
+        (cred.email === email || cred.email === email) && cred.password === password
+      );
+      
+      if (validCredentials) {
         // Simulate successful login
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("userEmail", email);
+        localStorage.setItem("userName", validCredentials.name);
+        localStorage.setItem("userRole", validCredentials.role);
         toast({
-          title: "Login Successful",
-          description: "Welcome to Kokuai Portal",
+          title: "Acceso Exitoso",
+          description: `Bienvenido ${validCredentials.name}`,
         });
         navigate("/dashboard");
       } else {
         toast({
-          title: "Login Failed",
-          description: "Please enter valid credentials",
+          title: "Error de Acceso",
+          description: "Credenciales incorrectas. Intenta con JMD/190582 o admin@kokuai.com/kokuai123",
           variant: "destructive",
         });
       }
