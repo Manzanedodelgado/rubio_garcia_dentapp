@@ -24,11 +24,22 @@ const Appointments = () => {
   
   // Get appointments with filters
   const selectedDateStr = selectedDate.toISOString().split('T')[0];
-  const { appointments, loading, error, refresh } = useAppointments({
-    start_date: filter === 'today' ? selectedDateStr : undefined,
-    end_date: filter === 'today' ? selectedDateStr : undefined,
-    status: filter !== 'all' && filter !== 'today' ? filter : undefined
-  });
+  const filters = {};
+  
+  // Only apply date filter if "today" is selected
+  if (filter === 'today') {
+    filters.start_date = selectedDateStr;
+    filters.end_date = selectedDateStr;
+  }
+  
+  // Only apply status filter if it's not 'all' or 'today'
+  if (filter !== 'all' && filter !== 'today') {
+    filters.status = filter;
+  }
+  
+  console.log('Applied filters:', filters);
+  
+  const { appointments, loading, error, refresh } = useAppointments(filters);
   
   const { syncing, triggerSync } = useSync();
 
