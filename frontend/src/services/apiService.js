@@ -27,13 +27,21 @@ apiClient.interceptors.request.use(
 // Response interceptor for error handling
 apiClient.interceptors.response.use(
   (response) => {
+    console.log(`API Success: ${response.config.method?.toUpperCase()} ${response.config.url} - ${response.status}`);
     return response;
   },
   (error) => {
     console.error('API Response Error:', error);
-    if (error.response?.status === 500) {
+    
+    // Handle specific error cases
+    if (error.response?.status === 307) {
+      console.warn('Redirect detected - this might cause infinite loops');
+    } else if (error.response?.status === 500) {
       console.error('Server Error:', error.response.data);
+    } else if (error.code === 'NETWORK_ERROR' || !error.response) {
+      console.error('Network Error: Could not connect to backend');
     }
+    
     return Promise.reject(error);
   }
 );
