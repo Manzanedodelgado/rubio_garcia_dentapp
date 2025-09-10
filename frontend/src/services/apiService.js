@@ -1,0 +1,83 @@
+import axios from 'axios';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
+
+// Create axios instance with default config
+const apiClient = axios.create({
+  baseURL: API,
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  }
+});
+
+// Request interceptor for logging
+apiClient.interceptors.request.use(
+  (config) => {
+    console.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
+    return config;
+  },
+  (error) => {
+    console.error('API Request Error:', error);
+    return Promise.reject(error);
+  }
+);
+
+// Response interceptor for error handling
+apiClient.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    console.error('API Response Error:', error);
+    if (error.response?.status === 500) {
+      console.error('Server Error:', error.response.data);
+    }
+    return Promise.reject(error);
+  }
+);
+
+// Appointments API
+export const appointmentsAPI = {
+  // Get all appointments with filters
+  getAll: (params = {}) => {
+    const queryParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== null && value !== undefined && value !== '') {
+        queryParams.append(key, value);
+      }
+    });
+    
+    const queryString = queryParams.toString();
+    const url = queryString ? `/appointments?${queryString}` : '/appointments';
+    
+    return apiClient.get(url);
+  },
+
+  // Get today's appointments
+  getToday: () => apiClient.get('/appointments/today'),
+
+  // Get upcoming appointments
+  getUpcoming: (days = 7) => apiClient.get(`/appointments/upcoming?days=${days}`),
+
+  // Get appointment statistics
+  getStats: () => apiClient.get('/appointments/stats'),
+
+  // Trigger manual sync
+  sync: () => apiClient.post('/appointments/sync'),
+
+  // Get sync status
+  getSyncStatus: () => apiClient.get('/appointments/sync/status'),
+};
+
+// General API
+export const generalAPI = {
+  // Health check
+  health: () => apiClient.get('/health'),
+
+  // Root endpoint
+  root: () => apiClient.get('/'),
+};
+
+export default apiClient;
