@@ -307,13 +307,13 @@ def create_appointments_router(db_client: AsyncIOMotorClient):
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Error fetching today's appointments: {str(e)}")
 
-    @router.get("/stats", response_model=AppointmentStats)
+    @router.get("/stats/", response_model=AppointmentStats)
     async def get_appointment_stats():
         """Get appointment statistics"""
         try:
             db = sheets_service.db
             
-            # Get all appointments
+            # Get all appointments count
             total = await db.appointments.count_documents({"source": "google_sheets"})
             
             # Today's appointments
@@ -344,7 +344,7 @@ def create_appointments_router(db_client: AsyncIOMotorClient):
                 "status": "cancelled"
             })
             
-            return AppointmentStats(
+            stats = AppointmentStats(
                 total_appointments=total,
                 today_appointments=today_count,
                 confirmed_appointments=confirmed,
@@ -353,7 +353,11 @@ def create_appointments_router(db_client: AsyncIOMotorClient):
                 cancelled_appointments=cancelled
             )
             
+            logger.info(f"Stats calculated: {stats}")
+            return stats
+            
         except Exception as e:
+            logger.error(f"Error fetching stats: {str(e)}")
             raise HTTPException(status_code=500, detail=f"Error fetching stats: {str(e)}")
 
     @router.post("/sync", response_model=SyncResult)
