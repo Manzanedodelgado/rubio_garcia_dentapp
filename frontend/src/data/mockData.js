@@ -63,8 +63,18 @@ export const mockData = {
   ],
   
   // Mock user credentials for testing
-  testCredentials: {
-    email: "admin@kokuai.com",
-    password: "kokuai123"
-  }
+  testCredentials: [
+    {
+      email: "admin@kokuai.com",
+      password: "kokuai123",
+      name: "Dr. Smith",
+      role: "Administrator"
+    },
+    {
+      email: "JMD",
+      password: "190582", 
+      name: "Dr. JMD",
+      role: "Dentist"
+    }
+  ]
 };
