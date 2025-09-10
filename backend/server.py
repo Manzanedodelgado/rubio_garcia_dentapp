@@ -88,11 +88,6 @@ logger = logging.getLogger(__name__)
 async def startup_event():
     """Initialize background tasks on startup"""
     logger.info("Starting Rubio García Dental Portal API")
-    logger.info("Initializing Google Sheets sync...")
-    
-    # Start background sync task
-    asyncio.create_task(start_background_sync())
-    logger.info("Background sync task started")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
