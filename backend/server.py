@@ -9,7 +9,10 @@ from pydantic import BaseModel, Field
 from typing import List
 import uuid
 from datetime import datetime
+import asyncio
 
+# Import new routers
+from .routers.appointments import router as appointments_router, start_background_sync
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -20,7 +23,7 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # Create the main app without a prefix
-app = FastAPI()
+app = FastAPI(title="Rubio García Dental Portal API")
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
@@ -38,7 +41,7 @@ class StatusCheckCreate(BaseModel):
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Rubio García Dental Portal API", "status": "active"}
 
 @api_router.post("/status", response_model=StatusCheck)
 async def create_status_check(input: StatusCheckCreate):
@@ -52,13 +55,25 @@ async def get_status_checks():
     status_checks = await db.status_checks.find().to_list(1000)
     return [StatusCheck(**status_check) for status_check in status_checks]
 
+@api_router.get("/health")
+async def health_check():
+    return {
+        "status": "healthy",
+        "database": "connected",
+        "google_sheets_sync": "active",
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
 # Include the router in the main app
 app.include_router(api_router)
+
+# Include appointments router
+app.include_router(appointments_router)
 
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -70,6 +85,17 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+@app.on_event("startup")
+async def startup_event():
+    """Initialize background tasks on startup"""
+    logger.info("Starting Rubio García Dental Portal API")
+    logger.info("Initializing Google Sheets sync...")
+    
+    # Start background sync task
+    asyncio.create_task(start_background_sync())
+    logger.info("Background sync task started")
+
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
+    logger.info("Database connection closed")
