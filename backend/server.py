@@ -10,6 +10,7 @@ from typing import List
 import uuid
 from datetime import datetime
 import asyncio
+from appointments_service import create_appointments_router
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -64,7 +65,9 @@ async def health_check():
 # Include the router in the main app
 app.include_router(api_router)
 
-
+# Include appointments router
+appointments_router = create_appointments_router(client)
+app.include_router(appointments_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -85,6 +88,11 @@ logger = logging.getLogger(__name__)
 async def startup_event():
     """Initialize background tasks on startup"""
     logger.info("Starting Rubio García Dental Portal API")
+    logger.info("Initializing Google Sheets sync...")
+    
+    # Start background sync task
+    await appointments_router.start_background_sync()
+    logger.info("Background sync task started")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
