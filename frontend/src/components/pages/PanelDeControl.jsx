@@ -429,7 +429,7 @@ const PanelDeControl = () => {
         </Card>
       </div>
 
-      {/* Quick Actions */}
+      {/* Quick Actions - ARREGLADAS */}
       <Card className="border-slate-200">
         <CardHeader>
           <CardTitle>Acciones Rápidas</CardTitle>
@@ -446,15 +446,27 @@ const PanelDeControl = () => {
                 {syncing ? 'Sincronizando...' : 'Sincronizar Datos'}
               </span>
             </button>
-            <button className="p-4 border-2 border-dashed border-slate-300 rounded-lg hover:border-slate-500 hover:bg-slate-50 transition-colors text-center">
+            
+            <button 
+              onClick={() => navigate("/panel-de-control/patients")}
+              className="p-4 border-2 border-dashed border-slate-300 rounded-lg hover:border-slate-500 hover:bg-slate-50 transition-colors text-center"
+            >
               <Users className="h-6 w-6 mx-auto mb-2 text-slate-400" />
               <span className="text-sm font-medium">Ver Pacientes</span>
             </button>
-            <button className="p-4 border-2 border-dashed border-slate-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center">
+            
+            <button 
+              onClick={() => navigate("/panel-de-control/appointments")}
+              className="p-4 border-2 border-dashed border-slate-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+            >
               <Calendar className="h-6 w-6 mx-auto mb-2 text-slate-400" />
               <span className="text-sm font-medium">Ver Calendario</span>
             </button>
-            <button className="p-4 border-2 border-dashed border-slate-300 rounded-lg hover:border-slate-500 hover:bg-slate-50 transition-colors text-center">
+            
+            <button 
+              onClick={() => navigate("/panel-de-control/analytics")}
+              className="p-4 border-2 border-dashed border-slate-300 rounded-lg hover:border-slate-500 hover:bg-slate-50 transition-colors text-center"
+            >
               <TrendingUp className="h-6 w-6 mx-auto mb-2 text-slate-400" />
               <span className="text-sm font-medium">Ver Reportes</span>
             </button>
