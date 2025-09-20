@@ -59,12 +59,12 @@ const LoginPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-4">
       <Card className="w-full max-w-md bg-white shadow-xl rounded-xl border-0 p-8">
         <div className="text-center mb-8">
-          {/* Logo sin nombre de clínica */}
+          {/* Logo sin texto */}
           <div className="mb-6 flex justify-center">
             <img 
-              src="https://customer-assets.emergentagent.com/job_ai-hub-clone-1/artifacts/llonqh1v_IMG_0176.png" 
+              src="https://customer-assets.emergentagent.com/job_ai-hub-clone-1/artifacts/fsmto9g8_51303A10-85A7-48B4-A61F-4690EC360EB1.png" 
               alt="Portal Dental" 
-              className="h-24 object-contain"
+              className="h-16 w-16 object-contain"
             />
           </div>
           
