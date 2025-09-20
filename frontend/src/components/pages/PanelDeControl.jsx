@@ -22,10 +22,54 @@ import { useAppointmentStats, useTodayAppointments, useSync } from "../../hooks/
 import { useNavigate } from "react-router-dom";
 
 const PanelDeControl = () => {
+  const navigate = useNavigate();
   const userName = localStorage.getItem("userName") || "Dr. Rubio García";
   const { stats, loading: statsLoading, refresh: refreshStats } = useAppointmentStats();
   const { appointments: todayAppointments, loading: todayLoading, refresh: refreshToday } = useTodayAppointments();
   const { syncing, syncStatus, triggerSync } = useSync();
+
+  // Mock WhatsApp conversations data
+  const whatsappConversations = [
+    {
+      id: 1,
+      patient: "María González",
+      phone: "+52 555 1234",
+      lastMessage: "Doctor, tengo mucho dolor desde ayer",
+      priority: "rojo",
+      time: "hace 10 min",
+      unread: true
+    },
+    {
+      id: 2,
+      patient: "Carlos Mendez",
+      phone: "+52 555 5678", 
+      lastMessage: "Muchas gracias por la cita, nos vemos mañana",
+      priority: "azul",
+      time: "hace 25 min",
+      unread: false
+    },
+    {
+      id: 3,
+      patient: "Ana López",
+      phone: "+52 555 9012",
+      lastMessage: "¿Puedo adelantar mi cita? Es urgente",
+      priority: "rojo",
+      time: "hace 1 hora",
+      unread: true
+    },
+    {
+      id: 4,
+      patient: "Luis Rodriguez",
+      phone: "+52 555 3456",
+      lastMessage: "Perfecto, confirmo mi cita del viernes",
+      priority: "azul", 
+      time: "hace 2 horas",
+      unread: false
+    }
+  ];
+
+  const redConversations = whatsappConversations.filter(c => c.priority === 'rojo');
+  const blueConversations = whatsappConversations.filter(c => c.priority === 'azul');
 
   const handleRefresh = async () => {
     refreshStats();
