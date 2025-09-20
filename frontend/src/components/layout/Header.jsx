@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "../ui/button";
-import ToothAvatar from "../ui/tooth-avatar";
+import UserAvatar from "../ui/user-avatar";
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -139,10 +139,7 @@ const Header = ({ user, onSidebarToggle }) => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="flex items-center space-x-3 hover:bg-slate-100 pl-2 pr-4">
-                <ToothAvatar 
-                  size="sm" 
-                  color={user.avatarColor || "blue"}
-                />
+                <UserAvatar size="sm" />
                 <div className="hidden md:block text-left">
                   <p className="text-sm font-medium">{user.name}</p>
                   <p className="text-xs text-slate-500">{user.role}</p>
@@ -152,10 +149,7 @@ const Header = ({ user, onSidebarToggle }) => {
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuLabel>
                 <div className="flex items-center space-x-2">
-                  <ToothAvatar 
-                    size="sm" 
-                    color={user.avatarColor || "blue"}
-                  />
+                  <UserAvatar size="sm" />
                   <div>
                     <p className="font-medium">{user.name}</p>
                     <p className="text-xs text-slate-500">{user.role}</p>
@@ -164,12 +158,12 @@ const Header = ({ user, onSidebarToggle }) => {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               
-              <DropdownMenuItem onClick={() => navigate("/dashboard/profile")}>
+              <DropdownMenuItem onClick={() => navigate("/panel-de-control/profile")}>
                 <User className="mr-2 h-4 w-4" />
                 <span>Mi Perfil</span>
               </DropdownMenuItem>
               
-              <DropdownMenuItem onClick={() => navigate("/dashboard/settings")}>
+              <DropdownMenuItem onClick={() => navigate("/panel-de-control/settings")}>
                 <Settings className="mr-2 h-4 w-4" />
                 <span>Configuración</span>
               </DropdownMenuItem>

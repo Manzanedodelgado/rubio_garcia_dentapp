@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import ToothAvatar from "../ui/tooth-avatar";
+import UserAvatar from "../ui/user-avatar";
 import { Badge } from "../ui/badge";
 import { 
   User,
@@ -90,7 +90,7 @@ const Profile = () => {
                 <X className="h-4 w-4 mr-2" />
                 Cancelar
               </Button>
-              <Button onClick={handleSave} className="bg-emerald-600 hover:bg-emerald-700">
+              <Button onClick={handleSave} className="bg-blue-600 hover:bg-blue-700">
                 <Save className="h-4 w-4 mr-2" />
                 Guardar
               </Button>
@@ -110,13 +110,9 @@ const Profile = () => {
           <Card>
             <CardContent className="p-6 text-center">
               <div className="relative mb-4 flex justify-center">
-                <ToothAvatar 
-                  size="2xl" 
-                  color={profile.avatarColor}
-                  className="h-32 w-32"
-                />
+                <UserAvatar size="3xl" className="h-32 w-32" />
                 {isEditing && (
-                  <button className="absolute bottom-0 right-1/2 transform translate-x-1/2 translate-y-1/2 p-2 bg-emerald-600 text-white rounded-full hover:bg-emerald-700">
+                  <button className="absolute bottom-0 right-1/2 transform translate-x-1/2 translate-y-1/2 p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700">
                     <Camera className="h-4 w-4" />
                   </button>
                 )}
@@ -124,7 +120,7 @@ const Profile = () => {
               
               <h2 className="text-xl font-bold text-gray-900 mb-2">{profile.name}</h2>
               <p className="text-gray-600 mb-2">{profile.specialty}</p>
-              <Badge className="bg-emerald-100 text-emerald-700 mb-4">
+              <Badge className="bg-blue-100 text-blue-700 mb-4">
                 Licencia: {profile.license}
               </Badge>
               
@@ -183,7 +179,7 @@ const Profile = () => {
               return (
                 <Card key={index}>
                   <CardContent className="p-4 text-center">
-                    <IconComponent className="h-8 w-8 text-emerald-600 mx-auto mb-2" />
+                    <IconComponent className="h-8 w-8 text-blue-600 mx-auto mb-2" />
                     <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
                     <div className="text-xs text-gray-600">{stat.label}</div>
                   </CardContent>

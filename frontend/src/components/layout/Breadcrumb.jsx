@@ -7,7 +7,7 @@ const Breadcrumb = () => {
   const pathnames = location.pathname.split('/').filter(x => x);
   
   const breadcrumbNameMap = {
-    dashboard: 'Dashboard',
+    'panel-de-control': 'Panel de Control',
     appointments: 'Citas',
     patients: 'Pacientes', 
     analytics: 'Analíticas',
@@ -25,8 +25,8 @@ const Breadcrumb = () => {
   return (
     <nav className="flex items-center space-x-1 text-sm text-gray-600 px-6 py-3 bg-white border-b">
       <Link 
-        to="/dashboard" 
-        className="flex items-center hover:text-emerald-600 transition-colors"
+        to="/panel-de-control" 
+        className="flex items-center hover:text-blue-600 transition-colors"
       >
         <Home className="h-4 w-4" />
       </Link>
@@ -44,7 +44,7 @@ const Breadcrumb = () => {
             ) : (
               <Link 
                 to={routeTo}
-                className="hover:text-emerald-600 transition-colors"
+                className="hover:text-blue-600 transition-colors"
               >
                 {displayName}
               </Link>

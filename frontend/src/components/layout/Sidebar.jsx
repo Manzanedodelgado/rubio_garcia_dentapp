@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Button } from "../ui/button";
-import ToothAvatar from "../ui/tooth-avatar";
+import UserAvatar from "../ui/user-avatar";
 import {
   Home,
   Calendar,
@@ -21,56 +21,56 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
 
   const menuItems = [
     {
-      name: "Dashboard",
-      path: "/dashboard",
+      name: "Panel de Control",
+      path: "/panel-de-control",
       icon: Home,
       description: "Vista general"
     },
     {
       name: "Citas",
-      path: "/dashboard/appointments", 
+      path: "/panel-de-control/appointments", 
       icon: Calendar,
       description: "Gestión de citas",
       submenu: [
-        { name: "Calendario", path: "/dashboard/appointments" },
-        { name: "Nueva Cita", path: "/dashboard/appointments/new" },
-        { name: "Historial", path: "/dashboard/appointments/history" }
+        { name: "Calendario", path: "/panel-de-control/appointments" },
+        { name: "Nueva Cita", path: "/panel-de-control/appointments/new" },
+        { name: "Historial", path: "/panel-de-control/appointments/history" }
       ]
     },
     {
       name: "Pacientes",
-      path: "/dashboard/patients",
+      path: "/panel-de-control/patients",
       icon: Users,
       description: "Base de datos de pacientes",
       submenu: [
-        { name: "Lista de Pacientes", path: "/dashboard/patients" },
-        { name: "Nuevo Paciente", path: "/dashboard/patients/new" },
-        { name: "Historial Médico", path: "/dashboard/patients/history" }
+        { name: "Lista de Pacientes", path: "/panel-de-control/patients" },
+        { name: "Nuevo Paciente", path: "/panel-de-control/patients/new" },
+        { name: "Historial Médico", path: "/panel-de-control/patients/history" }
       ]
     },
     {
       name: "Analíticas", 
-      path: "/dashboard/analytics",
+      path: "/panel-de-control/analytics",
       icon: BarChart3,
       description: "Reportes y métricas"
     },
     {
       name: "IA Assistant",
-      path: "/dashboard/ai-assistant",
+      path: "/panel-de-control/ai-assistant",
       icon: Bot,
       description: "Asistente inteligente",
       badge: "NEW"
     },
     {
       name: "Mensajes",
-      path: "/dashboard/messages",
+      path: "/panel-de-control/messages",
       icon: MessageSquare,
       description: "WhatsApp & Comunicación",
       badge: "5"
     },
     {
       name: "Facturación",
-      path: "/dashboard/billing",
+      path: "/panel-de-control/billing",
       icon: CreditCard,
       description: "Pagos y finanzas"
     }
@@ -79,13 +79,13 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
   const bottomMenuItems = [
     {
       name: "Configuración",
-      path: "/dashboard/settings",
+      path: "/panel-de-control/settings",
       icon: Settings,
       description: "Ajustes del sistema"
     },
     {
       name: "Perfil",
-      path: "/dashboard/profile", 
+      path: "/panel-de-control/profile", 
       icon: User,
       description: "Mi perfil"
     }
@@ -139,9 +139,9 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
               />
               <div>
                 <h1 className="text-lg font-semibold text-slate-800">
-                  Rubio García Dental
+                  Portal Profesional
                 </h1>
-                <p className="text-xs text-slate-500">Portal Profesional</p>
+                <p className="text-xs text-slate-500">Sistema de Gestión</p>
               </div>
             </div>
           )}
@@ -164,10 +164,7 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
         {isOpen && (
           <div className="p-4 border-b border-slate-200 bg-slate-50">
             <div className="flex items-center space-x-3">
-              <ToothAvatar 
-                size="md" 
-                color={user.avatarColor || "blue"}
-              />
+              <UserAvatar size="md" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-slate-900 truncate">
                   {user.name}
@@ -182,10 +179,7 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
 
         {!isOpen && (
           <div className="p-2 border-b border-slate-200 bg-slate-50 flex justify-center">
-            <ToothAvatar 
-              size="sm" 
-              color={user.avatarColor || "blue"}
-            />
+            <UserAvatar size="sm" />
           </div>
         )}
 
