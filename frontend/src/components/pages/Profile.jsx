@@ -109,13 +109,12 @@ const Profile = () => {
         <div className="lg:col-span-1">
           <Card>
             <CardContent className="p-6 text-center">
-              <div className="relative mb-4">
-                <Avatar className="h-32 w-32 mx-auto">
-                  <AvatarImage src={profile.avatar} alt={profile.name} />
-                  <AvatarFallback className="text-2xl">
-                    {profile.name.split(' ').map(n => n[0]).join('')}
-                  </AvatarFallback>
-                </Avatar>
+              <div className="relative mb-4 flex justify-center">
+                <ToothAvatar 
+                  size="2xl" 
+                  color={profile.avatarColor}
+                  className="h-32 w-32"
+                />
                 {isEditing && (
                   <button className="absolute bottom-0 right-1/2 transform translate-x-1/2 translate-y-1/2 p-2 bg-emerald-600 text-white rounded-full hover:bg-emerald-700">
                     <Camera className="h-4 w-4" />
