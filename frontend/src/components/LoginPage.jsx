@@ -59,8 +59,8 @@ const LoginPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-4">
       <Card className="w-full max-w-md bg-white shadow-xl rounded-xl border-0 p-8">
         <div className="text-center mb-8">
-          {/* Logo sin texto */}
-          <div className="mb-6 flex justify-center">
+          {/* Logo con nombre de clínica */}
+          <div className="mb-4 flex justify-center">
             <img 
               src="https://customer-assets.emergentagent.com/job_ai-hub-clone-1/artifacts/fsmto9g8_51303A10-85A7-48B4-A61F-4690EC360EB1.png" 
               alt="Portal Dental" 
@@ -68,6 +68,9 @@ const LoginPage = () => {
             />
           </div>
           
+          <h2 className="text-2xl font-bold text-slate-800 mb-2">
+            RUBIO GARCÍA DENTAL
+          </h2>
           <p className="text-slate-600 text-base mb-6">Portal Profesional</p>
         </div>
 

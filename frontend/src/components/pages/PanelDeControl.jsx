@@ -103,15 +103,15 @@ const PanelDeControl = () => {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Welcome Section */}
+    <div className="space-y-4">
+      {/* Welcome Section - MODIFICADO */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">
-            Bienvenido de vuelta, {userName}
+          <h1 className="text-2xl font-bold text-slate-900 mb-1">
+            Bienvenido, {userName}
           </h1>
-          <p className="text-slate-600">
-            Panel de gestión dental - Datos en tiempo real desde Google Sheets
+          <p className="text-slate-600 text-sm">
+            Portal de gestión dental - Datos en tiempo real desde Google Sheets
           </p>
         </div>
         
@@ -139,208 +139,143 @@ const PanelDeControl = () => {
         </div>
       </div>
 
-      {/* Sync Status */}
+      {/* Sync Status - COMPACTO */}
       {syncStatus && (
         <Card className="border-blue-200 bg-blue-50">
-          <CardContent className="p-4">
+          <CardContent className="p-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Database className="h-5 w-5 text-blue-600" />
+                <Database className="h-4 w-4 text-blue-600" />
                 <span className="text-sm font-medium text-blue-900">
-                  Datos sincronizados con Google Sheets
+                  Google Sheets sincronizado
                 </span>
               </div>
               <span className="text-xs text-blue-700">
-                Última actualización: {formatLastUpdate(syncStatus.last_update)}
+                {formatLastUpdate(syncStatus.last_update)}
               </span>
             </div>
           </CardContent>
         </Card>
       )}
 
-      {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="hover:shadow-lg transition-shadow border-slate-200">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-slate-600">Citas de Hoy</p>
-                <p className="text-3xl font-bold text-slate-900">
-                  {statsLoading ? '...' : (stats?.today_appointments || 0)}
-                </p>
-                <p className="text-xs text-blue-600 flex items-center mt-1">
-                  <Calendar className="h-3 w-3 mr-1" />
-                  En tiempo real
-                </p>
-              </div>
-              <div className="p-3 bg-blue-100 rounded-full">
-                <Calendar className="h-6 w-6 text-blue-600" />
-              </div>
+      {/* Stats Overview - COMPACTAS */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <Card className="hover:shadow-md transition-shadow border-slate-200">
+          <CardContent className="p-4">
+            <div className="text-center">
+              <Calendar className="h-6 w-6 text-blue-600 mx-auto mb-2" />
+              <p className="text-lg font-bold text-slate-900">
+                {statsLoading ? '...' : (stats?.today_appointments || 0)}
+              </p>
+              <p className="text-xs text-slate-600">Agenda Hoy</p>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="hover:shadow-lg transition-shadow border-slate-200">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-slate-600">Total Citas</p>
-                <p className="text-3xl font-bold text-slate-900">
-                  {statsLoading ? '...' : (stats?.total_appointments || 0)}
-                </p>
-                <p className="text-xs text-slate-600 flex items-center mt-1">
-                  <ArrowUpRight className="h-3 w-3 mr-1" />
-                  Todas las programadas
-                </p>
-              </div>
-              <div className="p-3 bg-slate-100 rounded-full">
-                <Users className="h-6 w-6 text-slate-600" />
-              </div>
+        <Card className="hover:shadow-md transition-shadow border-slate-200">
+          <CardContent className="p-4">
+            <div className="text-center">
+              <Users className="h-6 w-6 text-slate-600 mx-auto mb-2" />
+              <p className="text-lg font-bold text-slate-900">
+                {statsLoading ? '...' : (stats?.total_appointments || 0)}
+              </p>
+              <p className="text-xs text-slate-600">Total</p>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="hover:shadow-lg transition-shadow border-slate-200">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-slate-600">Confirmadas</p>
-                <p className="text-3xl font-bold text-slate-900">
-                  {statsLoading ? '...' : (stats?.confirmed_appointments || 0)}
-                </p>
-                <p className="text-xs text-green-600 flex items-center mt-1">
-                  <ArrowUpRight className="h-3 w-3 mr-1" />
-                  Citas confirmadas
-                </p>
-              </div>
-              <div className="p-3 bg-green-100 rounded-full">
-                <DollarSign className="h-6 w-6 text-green-600" />
-              </div>
+        <Card className="hover:shadow-md transition-shadow border-slate-200">
+          <CardContent className="p-4">
+            <div className="text-center">
+              <CheckCircle className="h-6 w-6 text-green-600 mx-auto mb-2" />
+              <p className="text-lg font-bold text-slate-900">
+                {statsLoading ? '...' : (stats?.confirmed_appointments || 0)}
+              </p>
+              <p className="text-xs text-slate-600">Confirmadas</p>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="hover:shadow-lg transition-shadow border-slate-200">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-slate-600">Pendientes</p>
-                <p className="text-3xl font-bold text-slate-900">
-                  {statsLoading ? '...' : (stats?.pending_appointments || 0)}
-                </p>
-                <p className="text-xs text-orange-600 flex items-center mt-1">
-                  <Clock className="h-3 w-3 mr-1" />
-                  Por confirmar
-                </p>
-              </div>
-              <div className="p-3 bg-orange-100 rounded-full">
-                <Clock className="h-6 w-6 text-orange-600" />
-              </div>
+        <Card className="hover:shadow-md transition-shadow border-slate-200">
+          <CardContent className="p-4">
+            <div className="text-center">
+              <Clock className="h-6 w-6 text-orange-600 mx-auto mb-2" />
+              <p className="text-lg font-bold text-slate-900">
+                {statsLoading ? '...' : (stats?.pending_appointments || 0)}
+              </p>
+              <p className="text-xs text-slate-600">Pendientes</p>
             </div>
           </CardContent>
         </Card>
       </div>
 
-        {/* AI Assistant Activity - Reubicada */}
+      {/* Main Content Grid - REUBICADO Y COMPACTO */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Today's Appointments - MÁS COMPACTA */}
         <Card className="border-slate-200">
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center justify-between text-base">
               <span className="flex items-center gap-2">
-                <Activity className="h-5 w-5" />
-                Actividad del Sistema
+                <Calendar className="h-4 w-4" />
+                Agenda de Hoy
               </span>
-              <Badge className="bg-blue-100 text-blue-700">Activo</Badge>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="text-center p-4 bg-blue-50 rounded-lg">
-                <Database className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-blue-600">{stats?.total_appointments || 0}</div>
-                <div className="text-xs text-blue-700">Citas Sincronizadas</div>
-              </div>
-              <div className="text-center p-4 bg-green-50 rounded-lg">
-                <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-green-600">98%</div>
-                <div className="text-xs text-green-700">Sincronización OK</div>
-              </div>
-              <div className="text-center p-4 bg-purple-50 rounded-lg">
-                <TrendingUp className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-purple-600">5 min</div>
-                <div className="text-xs text-purple-700">Intervalo Auto-Sync</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Today's Appointments */}
-        <Card className="border-slate-200">
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <span className="flex items-center gap-2">
-                <Calendar className="h-5 w-5" />
-                Citas de Hoy
-              </span>
-              <Badge variant="secondary" className="bg-blue-100 text-blue-700">
+              <Badge variant="secondary" className="bg-blue-100 text-blue-700 text-xs">
                 {todayLoading ? 'Cargando...' : `${todayAppointments.length} citas`}
               </Badge>
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
+          <CardContent className="pt-0">
+            <div className="space-y-2 max-h-72 overflow-y-auto">
               {todayLoading ? (
                 <div className="text-center py-4">
-                  <div className="animate-pulse">Cargando citas...</div>
+                  <div className="animate-pulse text-sm">Cargando agenda...</div>
                 </div>
               ) : todayAppointments.length === 0 ? (
-                <div className="text-center py-8">
-                  <Calendar className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                  <p className="text-slate-500">No hay citas programadas para hoy</p>
+                <div className="text-center py-6">
+                  <Calendar className="h-8 w-8 text-slate-400 mx-auto mb-2" />
+                  <p className="text-slate-500 text-sm">No hay citas programadas para hoy</p>
                 </div>
               ) : (
-                todayAppointments.slice(0, 5).map((appointment) => (
-                  <div key={appointment._id} className="flex items-center justify-between py-3 border-b border-slate-200 last:border-0">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center">
-                        <span className="text-sm font-medium text-slate-600">
+                todayAppointments.slice(0, 4).map((appointment) => (
+                  <div key={appointment._id} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center">
+                        <span className="text-xs font-medium text-slate-600">
                           {appointment.patient_name?.split(' ').map(n => n[0]).join('') || '??'}
                         </span>
                       </div>
                       <div>
-                        <p className="font-medium text-slate-900">{appointment.patient_name || 'Sin nombre'}</p>
-                        <p className="text-sm text-slate-600">{appointment.treatment || 'Sin tratamiento'}</p>
+                        <p className="text-sm font-medium text-slate-900">{appointment.patient_name || 'Sin nombre'}</p>
+                        <p className="text-xs text-slate-600">{appointment.treatment || 'Sin tratamiento'}</p>
                       </div>
                     </div>
                     <div className="text-right">
                       <p className="text-sm font-medium">{appointment.time || 'Sin hora'}</p>
                       <Badge 
-                        variant={appointment.status === 'completed' ? 'default' : 
-                                appointment.status === 'confirmed' ? 'secondary' : 'destructive'}
                         className={`text-xs ${
                           appointment.status === 'completed' ? 'bg-green-100 text-green-700' : 
                           appointment.status === 'confirmed' ? 'bg-blue-100 text-blue-700' : 
-                          appointment.status === 'pending' ? 'bg-yellow-100 text-yellow-700' : ''
+                          appointment.status === 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'
                         }`}
                       >
-                        {appointment.status === 'completed' ? 'Completada' : 
-                         appointment.status === 'confirmed' ? 'Confirmada' :
-                         appointment.status === 'pending' ? 'Pendiente' : 'Cancelada'}
+                        {appointment.status === 'completed' ? 'OK' : 
+                         appointment.status === 'confirmed' ? 'CONF' :
+                         appointment.status === 'pending' ? 'PEND' : 'CANC'}
                       </Badge>
                     </div>
                   </div>
                 ))
               )}
               
-              {todayAppointments.length > 5 && (
+              {todayAppointments.length > 4 && (
                 <div className="text-center pt-2">
                   <Button 
                     variant="outline" 
                     size="sm"
-                    onClick={() => navigate("/panel-de-control/appointments")}
+                    onClick={() => navigate("/panel-de-control/agenda")}
+                    className="text-xs"
                   >
-                    Ver todas las citas ({todayAppointments.length})
+                    Ver todas ({todayAppointments.length})
                   </Button>
                 </div>
               )}
@@ -348,43 +283,43 @@ const PanelDeControl = () => {
           </CardContent>
         </Card>
 
-        {/* WhatsApp Conversations IA - NUEVA SECCIÓN */}
+        {/* WhatsApp Conversations IA - COMPACTA */}
         <Card className="border-slate-200">
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center justify-between text-base">
               <span className="flex items-center gap-2">
-                <MessageSquare className="h-5 w-5" />
+                <MessageSquare className="h-4 w-4" />
                 Conversaciones WhatsApp IA
               </span>
-              <div className="flex items-center gap-2">
-                <Badge className="bg-red-100 text-red-700">
+              <div className="flex items-center gap-1">
+                <Badge className="bg-red-100 text-red-700 text-xs">
                   {redConversations.length} Rojas
                 </Badge>
-                <Badge className="bg-blue-100 text-blue-700">
+                <Badge className="bg-blue-100 text-blue-700 text-xs">
                   {blueConversations.length} Azules
                 </Badge>
               </div>
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-3 max-h-80 overflow-y-auto">
-              {/* Conversaciones ROJAS (Urgentes) */}
+          <CardContent className="pt-0">
+            <div className="space-y-2 max-h-72 overflow-y-auto">
+              {/* Conversaciones ROJAS (Urgentes) PRIMERO */}
               {redConversations.map((conversation) => (
-                <div key={`red-${conversation.id}`} className="flex items-start gap-3 p-3 bg-red-50 border border-red-200 rounded-lg">
-                  <div className="p-2 bg-red-100 rounded-full">
-                    <AlertTriangle className="h-4 w-4 text-red-600" />
+                <div key={`red-${conversation.id}`} className="flex items-start gap-2 p-2 bg-red-50 border border-red-200 rounded-md">
+                  <div className="p-1 bg-red-100 rounded-full">
+                    <AlertTriangle className="h-3 w-3 text-red-600" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
                       <p className="text-sm font-medium text-red-900">{conversation.patient}</p>
                       <span className="text-xs text-red-600">{conversation.time}</span>
                     </div>
-                    <p className="text-sm text-red-700 truncate mb-1">{conversation.lastMessage}</p>
-                    <div className="flex items-center gap-2">
-                      <Phone className="h-3 w-3 text-red-500" />
+                    <p className="text-xs text-red-700 truncate mb-1">{conversation.lastMessage}</p>
+                    <div className="flex items-center gap-1">
+                      <Phone className="h-2 w-2 text-red-500" />
                       <span className="text-xs text-red-600">{conversation.phone}</span>
                       {conversation.unread && (
-                        <Badge variant="destructive" className="h-4 text-xs px-1">NUEVO</Badge>
+                        <Badge variant="destructive" className="h-3 text-xs px-1 ml-1">!</Badge>
                       )}
                     </div>
                   </div>
@@ -393,33 +328,30 @@ const PanelDeControl = () => {
 
               {/* Conversaciones AZULES (Normales) */}
               {blueConversations.map((conversation) => (
-                <div key={`blue-${conversation.id}`} className="flex items-start gap-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <div className="p-2 bg-blue-100 rounded-full">
-                    <CheckCircle className="h-4 w-4 text-blue-600" />
+                <div key={`blue-${conversation.id}`} className="flex items-start gap-2 p-2 bg-blue-50 border border-blue-200 rounded-md">
+                  <div className="p-1 bg-blue-100 rounded-full">
+                    <CheckCircle className="h-3 w-3 text-blue-600" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
                       <p className="text-sm font-medium text-blue-900">{conversation.patient}</p>
                       <span className="text-xs text-blue-600">{conversation.time}</span>
                     </div>
-                    <p className="text-sm text-blue-700 truncate mb-1">{conversation.lastMessage}</p>
-                    <div className="flex items-center gap-2">
-                      <Phone className="h-3 w-3 text-blue-500" />
+                    <p className="text-xs text-blue-700 truncate mb-1">{conversation.lastMessage}</p>
+                    <div className="flex items-center gap-1">
+                      <Phone className="h-2 w-2 text-blue-500" />
                       <span className="text-xs text-blue-600">{conversation.phone}</span>
-                      {conversation.unread && (
-                        <Badge className="bg-blue-200 text-blue-700 h-4 text-xs px-1">NUEVO</Badge>
-                      )}
                     </div>
                   </div>
                 </div>
               ))}
             </div>
             
-            <div className="mt-4 pt-3 border-t border-slate-200">
+            <div className="mt-3 pt-2 border-t border-slate-200">
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="w-full"
+                className="w-full text-xs"
                 onClick={() => navigate("/panel-de-control/messages")}
               >
                 Ver todas las conversaciones
@@ -429,46 +361,78 @@ const PanelDeControl = () => {
         </Card>
       </div>
 
-      {/* Quick Actions - ARREGLADAS */}
+      {/* AI Assistant Activity - MÁS COMPACTA */}
       <Card className="border-slate-200">
-        <CardHeader>
-          <CardTitle>Acciones Rápidas</CardTitle>
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center justify-between text-base">
+            <span className="flex items-center gap-2">
+              <Activity className="h-4 w-4" />
+              Actividad del Sistema
+            </span>
+            <Badge className="bg-blue-100 text-blue-700 text-xs">Activo</Badge>
+          </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <CardContent className="pt-0">
+          <div className="grid grid-cols-3 gap-3">
+            <div className="text-center p-3 bg-blue-50 rounded-lg">
+              <Database className="h-6 w-6 text-blue-600 mx-auto mb-1" />
+              <div className="text-lg font-bold text-blue-600">{stats?.total_appointments || 0}</div>
+              <div className="text-xs text-blue-700">Citas</div>
+            </div>
+            <div className="text-center p-3 bg-green-50 rounded-lg">
+              <CheckCircle className="h-6 w-6 text-green-600 mx-auto mb-1" />
+              <div className="text-lg font-bold text-green-600">98%</div>
+              <div className="text-xs text-green-700">Sync OK</div>
+            </div>
+            <div className="text-center p-3 bg-purple-50 rounded-lg">
+              <TrendingUp className="h-6 w-6 text-purple-600 mx-auto mb-1" />
+              <div className="text-lg font-bold text-purple-600">5 min</div>
+              <div className="text-xs text-purple-700">Auto-Sync</div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Quick Actions - FUNCIONALES */}
+      <Card className="border-slate-200">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base">Acciones Rápidas</CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <button 
               onClick={handleSync}
               disabled={syncing}
-              className="p-4 border-2 border-dashed border-slate-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center disabled:opacity-50"
+              className="p-3 border-2 border-dashed border-slate-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center disabled:opacity-50"
             >
-              <Database className={`h-6 w-6 mx-auto mb-2 text-slate-400 ${syncing ? 'animate-spin' : ''}`} />
-              <span className="text-sm font-medium">
-                {syncing ? 'Sincronizando...' : 'Sincronizar Datos'}
+              <Database className={`h-5 w-5 mx-auto mb-1 text-slate-400 ${syncing ? 'animate-spin' : ''}`} />
+              <span className="text-xs font-medium">
+                {syncing ? 'Sincronizando...' : 'Sincronizar'}
               </span>
             </button>
             
             <button 
               onClick={() => navigate("/panel-de-control/patients")}
-              className="p-4 border-2 border-dashed border-slate-300 rounded-lg hover:border-slate-500 hover:bg-slate-50 transition-colors text-center"
+              className="p-3 border-2 border-dashed border-slate-300 rounded-lg hover:border-slate-500 hover:bg-slate-50 transition-colors text-center"
             >
-              <Users className="h-6 w-6 mx-auto mb-2 text-slate-400" />
-              <span className="text-sm font-medium">Ver Pacientes</span>
+              <Users className="h-5 w-5 mx-auto mb-1 text-slate-400" />
+              <span className="text-xs font-medium">Pacientes</span>
             </button>
             
             <button 
-              onClick={() => navigate("/panel-de-control/appointments")}
-              className="p-4 border-2 border-dashed border-slate-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+              onClick={() => navigate("/panel-de-control/agenda")}
+              className="p-3 border-2 border-dashed border-slate-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
             >
-              <Calendar className="h-6 w-6 mx-auto mb-2 text-slate-400" />
-              <span className="text-sm font-medium">Ver Calendario</span>
+              <Calendar className="h-5 w-5 mx-auto mb-1 text-slate-400" />
+              <span className="text-xs font-medium">Agenda</span>
             </button>
             
             <button 
               onClick={() => navigate("/panel-de-control/analytics")}
-              className="p-4 border-2 border-dashed border-slate-300 rounded-lg hover:border-slate-500 hover:bg-slate-50 transition-colors text-center"
+              className="p-3 border-2 border-dashed border-slate-300 rounded-lg hover:border-slate-500 hover:bg-slate-50 transition-colors text-center"
             >
-              <TrendingUp className="h-6 w-6 mx-auto mb-2 text-slate-400" />
-              <span className="text-sm font-medium">Ver Reportes</span>
+              <TrendingUp className="h-5 w-5 mx-auto mb-1 text-slate-400" />
+              <span className="text-xs font-medium">Reportes</span>
             </button>
           </div>
         </CardContent>

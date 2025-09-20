@@ -8,7 +8,9 @@ const Breadcrumb = () => {
   
   const breadcrumbNameMap = {
     'panel-de-control': 'Panel de Control',
-    appointments: 'Citas',
+    agenda: 'Agenda',
+    nueva: 'Nueva Cita',
+    historial: 'Historial',
     patients: 'Pacientes', 
     analytics: 'Analíticas',
     'ai-assistant': 'IA Assistant',

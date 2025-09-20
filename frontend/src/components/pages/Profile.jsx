@@ -22,6 +22,8 @@ import { toast } from "../../hooks/use-toast";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
+  
+  // Initialize profile from localStorage or defaults
   const [profile, setProfile] = useState({
     name: localStorage.getItem("userName") || "Juan Antonio Manzanedo",
     email: localStorage.getItem("userEmail") || "jmd@rubiogarcia.com",
@@ -30,28 +32,42 @@ const Profile = () => {
     specialty: "Dirección Clínica",
     license: "CED-12345",
     yearsExperience: 15,
-    education: "Universidad Nacional de Odontología",
-    avatarColor: localStorage.getItem("avatarColor") || "blue"
+    education: "Universidad Nacional de Odontología"
   });
 
-  const [editedProfile, setEditedProfile] = useState(profile);
+  const [editedProfile, setEditedProfile] = useState({ ...profile });
 
   const handleEdit = () => {
     setIsEditing(true);
-    setEditedProfile(profile);
+    setEditedProfile({ ...profile });
   };
 
   const handleSave = () => {
-    setProfile(editedProfile);
-    setIsEditing(false);
-    toast({
-      title: "Perfil actualizado",
-      description: "Los cambios se han guardado exitosamente",
-    });
+    try {
+      setProfile({ ...editedProfile });
+      
+      // Update localStorage with new values
+      localStorage.setItem("userName", editedProfile.name);
+      localStorage.setItem("userEmail", editedProfile.email);
+      
+      setIsEditing(false);
+      
+      toast({
+        title: "Perfil actualizado",
+        description: "Los cambios se han guardado exitosamente",
+      });
+    } catch (error) {
+      console.error("Error saving profile:", error);
+      toast({
+        title: "Error al guardar",
+        description: "No se pudieron guardar los cambios",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleCancel = () => {
-    setEditedProfile(profile);
+    setEditedProfile({ ...profile });
     setIsEditing(false);
   };
 
@@ -204,7 +220,7 @@ const Profile = () => {
                       onChange={(e) => handleInputChange('name', e.target.value)}
                     />
                   ) : (
-                    <p className="text-gray-900">{profile.name}</p>
+                    <p className="text-gray-900 p-2 border rounded-md bg-gray-50">{profile.name}</p>
                   )}
                 </div>
                 
@@ -218,7 +234,7 @@ const Profile = () => {
                       onChange={(e) => handleInputChange('email', e.target.value)}
                     />
                   ) : (
-                    <p className="text-gray-900">{profile.email}</p>
+                    <p className="text-gray-900 p-2 border rounded-md bg-gray-50">{profile.email}</p>
                   )}
                 </div>
                 
@@ -231,7 +247,7 @@ const Profile = () => {
                       onChange={(e) => handleInputChange('phone', e.target.value)}
                     />
                   ) : (
-                    <p className="text-gray-900">{profile.phone}</p>
+                    <p className="text-gray-900 p-2 border rounded-md bg-gray-50">{profile.phone}</p>
                   )}
                 </div>
                 
@@ -244,7 +260,7 @@ const Profile = () => {
                       onChange={(e) => handleInputChange('specialty', e.target.value)}
                     />
                   ) : (
-                    <p className="text-gray-900">{profile.specialty}</p>
+                    <p className="text-gray-900 p-2 border rounded-md bg-gray-50">{profile.specialty}</p>
                   )}
                 </div>
               </div>
@@ -258,7 +274,7 @@ const Profile = () => {
                     onChange={(e) => handleInputChange('address', e.target.value)}
                   />
                 ) : (
-                  <p className="text-gray-900">{profile.address}</p>
+                  <p className="text-gray-900 p-2 border rounded-md bg-gray-50">{profile.address}</p>
                 )}
               </div>
             </CardContent>
@@ -280,7 +296,7 @@ const Profile = () => {
                       onChange={(e) => handleInputChange('license', e.target.value)}
                     />
                   ) : (
-                    <p className="text-gray-900">{profile.license}</p>
+                    <p className="text-gray-900 p-2 border rounded-md bg-gray-50">{profile.license}</p>
                   )}
                 </div>
                 
@@ -291,10 +307,10 @@ const Profile = () => {
                       id="experience"
                       type="number"
                       value={editedProfile.yearsExperience}
-                      onChange={(e) => handleInputChange('yearsExperience', parseInt(e.target.value))}
+                      onChange={(e) => handleInputChange('yearsExperience', parseInt(e.target.value) || 0)}
                     />
                   ) : (
-                    <p className="text-gray-900">{profile.yearsExperience} años</p>
+                    <p className="text-gray-900 p-2 border rounded-md bg-gray-50">{profile.yearsExperience} años</p>
                   )}
                 </div>
               </div>
@@ -308,7 +324,7 @@ const Profile = () => {
                     onChange={(e) => handleInputChange('education', e.target.value)}
                   />
                 ) : (
-                  <p className="text-gray-900">{profile.education}</p>
+                  <p className="text-gray-900 p-2 border rounded-md bg-gray-50">{profile.education}</p>
                 )}
               </div>
             </CardContent>
