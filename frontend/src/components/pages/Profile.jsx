@@ -23,15 +23,15 @@ import { toast } from "../../hooks/use-toast";
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState({
-    name: "Dr. Carlos Smith",
-    email: "carlos.smith@kokuai.com",
+    name: localStorage.getItem("userName") || "Juan Antonio Manzanedo",
+    email: localStorage.getItem("userEmail") || "jmd@rubiogarcia.com",
     phone: "+52 555 0123",
     address: "Av. Reforma 456, CDMX",
-    specialty: "Odontología General",
+    specialty: "Dirección Clínica",
     license: "CED-12345",
-    yearsExperience: 8,
+    yearsExperience: 15,
     education: "Universidad Nacional de Odontología",
-    avatar: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=200&h=200&fit=crop&crop=face"
+    avatarColor: localStorage.getItem("avatarColor") || "blue"
   });
 
   const [editedProfile, setEditedProfile] = useState(profile);
