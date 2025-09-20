@@ -62,7 +62,7 @@ const Dashboard = () => {
             Bienvenido de vuelta, {userName}
           </h1>
           <p className="text-slate-600">
-            Aquí tienes un resumen de tu clínica dental hoy.
+            Portal de gestión para Rubio García Dental - Datos en tiempo real desde Google Sheets
           </p>
         </div>
         
