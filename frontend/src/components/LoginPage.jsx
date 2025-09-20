@@ -36,7 +36,7 @@ const LoginPage = () => {
           title: "Acceso Exitoso",
           description: `Bienvenido ${validCredentials.name}`,
         });
-        navigate("/dashboard");
+        navigate("/panel-de-control");
       } else {
         toast({
           title: "Error de Acceso",
@@ -59,18 +59,15 @@ const LoginPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-4">
       <Card className="w-full max-w-md bg-white shadow-xl rounded-xl border-0 p-8">
         <div className="text-center mb-8">
-          {/* Rubio García Dental Logo */}
+          {/* Logo sin nombre de clínica */}
           <div className="mb-6 flex justify-center">
             <img 
               src="https://customer-assets.emergentagent.com/job_ai-hub-clone-1/artifacts/llonqh1v_IMG_0176.png" 
-              alt="Rubio García Dental" 
+              alt="Portal Dental" 
               className="h-24 object-contain"
             />
           </div>
           
-          <h2 className="text-2xl font-bold text-slate-800 mb-2">
-            Rubio García Dental
-          </h2>
           <p className="text-slate-600 text-base mb-6">Portal Profesional</p>
         </div>
 
@@ -131,7 +128,7 @@ const LoginPage = () => {
         
         <div className="mt-6 pt-6 border-t border-slate-200">
           <p className="text-center text-xs text-slate-500">
-            Portal exclusivo para el equipo de Rubio García Dental
+            Portal exclusivo para equipo profesional
           </p>
         </div>
       </Card>

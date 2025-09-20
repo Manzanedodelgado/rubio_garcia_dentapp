@@ -2,8 +2,8 @@ import React from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
-import DashboardLayout from "./components/layout/DashboardLayout";
-import Dashboard from "./components/pages/Dashboard";
+import PanelLayout from "./components/layout/PanelLayout";
+import PanelDeControl from "./components/pages/PanelDeControl";
 import Appointments from "./components/pages/Appointments";
 import Patients from "./components/pages/Patients";
 import Analytics from "./components/pages/Analytics";
@@ -20,8 +20,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="/dashboard" element={<DashboardLayout />}>
-            <Route index element={<Dashboard />} />
+          <Route path="/panel-de-control" element={<PanelLayout />}>
+            <Route index element={<PanelDeControl />} />
             <Route path="appointments" element={<Appointments />} />
             <Route path="patients" element={<Patients />} />
             <Route path="analytics" element={<Analytics />} />
