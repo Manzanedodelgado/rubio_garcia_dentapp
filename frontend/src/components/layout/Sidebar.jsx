@@ -27,14 +27,14 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
       description: "Vista general"
     },
     {
-      name: "Citas",
-      path: "/panel-de-control/appointments", 
+      name: "Agenda",
+      path: "/panel-de-control/agenda", 
       icon: Calendar,
-      description: "Gestión de citas",
+      description: "Gestión de agenda",
       submenu: [
-        { name: "Calendario", path: "/panel-de-control/appointments" },
-        { name: "Nueva Cita", path: "/panel-de-control/appointments/new" },
-        { name: "Historial", path: "/panel-de-control/appointments/history" }
+        { name: "Calendario", path: "/panel-de-control/agenda" },
+        { name: "Nueva Cita", path: "/panel-de-control/agenda/nueva" },
+        { name: "Historial", path: "/panel-de-control/agenda/historial" }
       ]
     },
     {
@@ -189,7 +189,7 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
             <div key={item.name}>
               <NavItem 
                 item={item} 
-                isActive={location.pathname === item.path}
+                isActive={location.pathname === item.path || location.pathname.startsWith(item.path + '/')}
               />
               
               {/* Submenu */}
@@ -199,7 +199,9 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
                     <NavLink
                       key={subItem.name}
                       to={subItem.path}
-                      className={`block px-3 py-2 text-xs text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded`}
+                      className={`block px-3 py-2 text-xs text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded ${
+                        location.pathname === subItem.path ? 'bg-blue-50 text-blue-700' : ''
+                      }`}
                     >
                       {subItem.name}
                     </NavLink>

@@ -4,7 +4,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
 import PanelLayout from "./components/layout/PanelLayout";
 import PanelDeControl from "./components/pages/PanelDeControl";
-import Appointments from "./components/pages/Appointments";
+import Agenda from "./components/pages/Agenda";
+import NuevaCita from "./components/pages/NuevaCita";
+import HistorialCitas from "./components/pages/HistorialCitas";
 import Patients from "./components/pages/Patients";
 import Analytics from "./components/pages/Analytics";
 import AIAssistant from "./components/pages/AIAssistant";
@@ -22,7 +24,9 @@ function App() {
           <Route path="/" element={<LoginPage />} />
           <Route path="/panel-de-control" element={<PanelLayout />}>
             <Route index element={<PanelDeControl />} />
-            <Route path="appointments" element={<Appointments />} />
+            <Route path="agenda" element={<Agenda />} />
+            <Route path="agenda/nueva" element={<NuevaCita />} />
+            <Route path="agenda/historial" element={<HistorialCitas />} />
             <Route path="patients" element={<Patients />} />
             <Route path="analytics" element={<Analytics />} />
             <Route path="ai-assistant" element={<AIAssistant />} />
