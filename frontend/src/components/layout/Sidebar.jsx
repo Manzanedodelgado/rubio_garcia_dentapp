@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Button } from "../ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
+import ToothAvatar from "../ui/tooth-avatar";
 import {
   Home,
   Calendar,
@@ -131,7 +131,7 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-slate-200">
           {isOpen && (
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-3">
               <img 
                 src="https://customer-assets.emergentagent.com/job_ai-hub-clone-1/artifacts/fsmto9g8_51303A10-85A7-48B4-A61F-4690EC360EB1.png" 
                 alt="Dental Icon" 
@@ -139,9 +139,9 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
               />
               <div>
                 <h1 className="text-lg font-semibold text-slate-800">
-                  Rubio García
+                  Rubio García Dental
                 </h1>
-                <p className="text-xs text-slate-500">Dental Portal</p>
+                <p className="text-xs text-slate-500">Portal Profesional</p>
               </div>
             </div>
           )}
@@ -164,12 +164,10 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
         {isOpen && (
           <div className="p-4 border-b border-slate-200 bg-slate-50">
             <div className="flex items-center space-x-3">
-              <Avatar className="h-10 w-10">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="bg-blue-100 text-blue-600">
-                  {user.name.split(' ').map(n => n[0]).join('')}
-                </AvatarFallback>
-              </Avatar>
+              <ToothAvatar 
+                size="md" 
+                color={user.avatarColor || "blue"}
+              />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-slate-900 truncate">
                   {user.name}
@@ -179,6 +177,15 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
                 </p>
               </div>
             </div>
+          </div>
+        )}
+
+        {!isOpen && (
+          <div className="p-2 border-b border-slate-200 bg-slate-50 flex justify-center">
+            <ToothAvatar 
+              size="sm" 
+              color={user.avatarColor || "blue"}
+            />
           </div>
         )}
 

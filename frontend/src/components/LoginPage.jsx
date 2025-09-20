@@ -31,6 +31,7 @@ const LoginPage = () => {
         localStorage.setItem("userEmail", email);
         localStorage.setItem("userName", validCredentials.name);
         localStorage.setItem("userRole", validCredentials.role);
+        localStorage.setItem("avatarColor", validCredentials.avatarColor);
         toast({
           title: "Acceso Exitoso",
           description: `Bienvenido ${validCredentials.name}`,
@@ -67,7 +68,10 @@ const LoginPage = () => {
             />
           </div>
           
-          <p className="text-slate-600 text-base mb-6">Accede a tu portal profesional</p>
+          <h2 className="text-2xl font-bold text-slate-800 mb-2">
+            Rubio García Dental
+          </h2>
+          <p className="text-slate-600 text-base mb-6">Portal Profesional</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
@@ -124,6 +128,12 @@ const LoginPage = () => {
             </Button>
           </div>
         </form>
+        
+        <div className="mt-6 pt-6 border-t border-slate-200">
+          <p className="text-center text-xs text-slate-500">
+            Portal exclusivo para el equipo de Rubio García Dental
+          </p>
+        </div>
       </Card>
     </div>
   );
