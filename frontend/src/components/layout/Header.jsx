@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "../ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
+import ToothAvatar from "../ui/tooth-avatar";
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -40,6 +40,7 @@ const Header = ({ user, onSidebarToggle }) => {
     localStorage.removeItem("userEmail");
     localStorage.removeItem("userName");
     localStorage.removeItem("userRole");
+    localStorage.removeItem("avatarColor");
     toast({
       title: "Sesión cerrada",
       description: "Has cerrado sesión exitosamente",
@@ -137,13 +138,11 @@ const Header = ({ user, onSidebarToggle }) => {
           {/* User Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="flex items-center space-x-2 hover:bg-slate-100">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="bg-blue-100 text-blue-600">
-                    {user.name.split(' ').map(n => n[0]).join('')}
-                  </AvatarFallback>
-                </Avatar>
+              <Button variant="ghost" className="flex items-center space-x-3 hover:bg-slate-100 pl-2 pr-4">
+                <ToothAvatar 
+                  size="sm" 
+                  color={user.avatarColor || "blue"}
+                />
                 <div className="hidden md:block text-left">
                   <p className="text-sm font-medium">{user.name}</p>
                   <p className="text-xs text-slate-500">{user.role}</p>
@@ -151,7 +150,18 @@ const Header = ({ user, onSidebarToggle }) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
+              <DropdownMenuLabel>
+                <div className="flex items-center space-x-2">
+                  <ToothAvatar 
+                    size="sm" 
+                    color={user.avatarColor || "blue"}
+                  />
+                  <div>
+                    <p className="font-medium">{user.name}</p>
+                    <p className="text-xs text-slate-500">{user.role}</p>
+                  </div>
+                </div>
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
               
               <DropdownMenuItem onClick={() => navigate("/dashboard/profile")}>
