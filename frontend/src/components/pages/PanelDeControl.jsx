@@ -12,9 +12,14 @@ import {
   TrendingUp,
   ArrowUpRight,
   RefreshCw,
-  Database
+  Database,
+  AlertTriangle,
+  CheckCircle,
+  Phone,
+  Plus
 } from "lucide-react";
 import { useAppointmentStats, useTodayAppointments, useSync } from "../../hooks/useAppointments";
+import { useNavigate } from "react-router-dom";
 
 const PanelDeControl = () => {
   const userName = localStorage.getItem("userName") || "Dr. Rubio García";
