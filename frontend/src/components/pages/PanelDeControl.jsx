@@ -241,6 +241,38 @@ const PanelDeControl = () => {
         </Card>
       </div>
 
+        {/* AI Assistant Activity - Reubicada */}
+        <Card className="border-slate-200">
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <span className="flex items-center gap-2">
+                <Activity className="h-5 w-5" />
+                Actividad del Sistema
+              </span>
+              <Badge className="bg-blue-100 text-blue-700">Activo</Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="text-center p-4 bg-blue-50 rounded-lg">
+                <Database className="h-8 w-8 text-blue-600 mx-auto mb-2" />
+                <div className="text-2xl font-bold text-blue-600">{stats?.total_appointments || 0}</div>
+                <div className="text-xs text-blue-700">Citas Sincronizadas</div>
+              </div>
+              <div className="text-center p-4 bg-green-50 rounded-lg">
+                <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
+                <div className="text-2xl font-bold text-green-600">98%</div>
+                <div className="text-xs text-green-700">Sincronización OK</div>
+              </div>
+              <div className="text-center p-4 bg-purple-50 rounded-lg">
+                <TrendingUp className="h-8 w-8 text-purple-600 mx-auto mb-2" />
+                <div className="text-2xl font-bold text-purple-600">5 min</div>
+                <div className="text-xs text-purple-700">Intervalo Auto-Sync</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Today's Appointments */}
@@ -303,7 +335,11 @@ const PanelDeControl = () => {
               
               {todayAppointments.length > 5 && (
                 <div className="text-center pt-2">
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => navigate("/panel-de-control/appointments")}
+                  >
                     Ver todas las citas ({todayAppointments.length})
                   </Button>
                 </div>
@@ -312,57 +348,82 @@ const PanelDeControl = () => {
           </CardContent>
         </Card>
 
-        {/* System Activity */}
+        {/* WhatsApp Conversations IA - NUEVA SECCIÓN */}
         <Card className="border-slate-200">
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span className="flex items-center gap-2">
                 <MessageSquare className="h-5 w-5" />
-                Actividad del Sistema
+                Conversaciones WhatsApp IA
               </span>
-              <Badge className="bg-blue-100 text-blue-700">Google Sheets</Badge>
+              <div className="flex items-center gap-2">
+                <Badge className="bg-red-100 text-red-700">
+                  {redConversations.length} Rojas
+                </Badge>
+                <Badge className="bg-blue-100 text-blue-700">
+                  {blueConversations.length} Azules
+                </Badge>
+              </div>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-start gap-3 py-3 border-b border-slate-200 last:border-0">
-                <div className="p-2 bg-blue-100 rounded-full">
-                  <Activity className="h-4 w-4 text-blue-600" />
+            <div className="space-y-3 max-h-80 overflow-y-auto">
+              {/* Conversaciones ROJAS (Urgentes) */}
+              {redConversations.map((conversation) => (
+                <div key={`red-${conversation.id}`} className="flex items-start gap-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="p-2 bg-red-100 rounded-full">
+                    <AlertTriangle className="h-4 w-4 text-red-600" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1">
+                      <p className="text-sm font-medium text-red-900">{conversation.patient}</p>
+                      <span className="text-xs text-red-600">{conversation.time}</span>
+                    </div>
+                    <p className="text-sm text-red-700 truncate mb-1">{conversation.lastMessage}</p>
+                    <div className="flex items-center gap-2">
+                      <Phone className="h-3 w-3 text-red-500" />
+                      <span className="text-xs text-red-600">{conversation.phone}</span>
+                      {conversation.unread && (
+                        <Badge variant="destructive" className="h-4 text-xs px-1">NUEVO</Badge>
+                      )}
+                    </div>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-slate-900">Sincronización Automática</p>
-                  <p className="text-sm text-slate-600 mt-1">
-                    Los datos se actualizan automáticamente cada 5 minutos desde Google Sheets
-                  </p>
-                  <p className="text-xs text-slate-400 mt-2">Sistema activo</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-3 py-3 border-b border-slate-200 last:border-0">
-                <div className="p-2 bg-green-100 rounded-full">
-                  <Database className="h-4 w-4 text-green-600" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-slate-900">Base de Datos Actualizada</p>
-                  <p className="text-sm text-slate-600 mt-1">
-                    Última sincronización: {formatLastUpdate(syncStatus?.last_update)}
-                  </p>
-                  <p className="text-xs text-slate-400 mt-2">Estado: Conectado</p>
-                </div>
-              </div>
+              ))}
 
-              <div className="flex items-start gap-3 py-3">
-                <div className="p-2 bg-emerald-100 rounded-full">
-                  <TrendingUp className="h-4 w-4 text-emerald-600" />
+              {/* Conversaciones AZULES (Normales) */}
+              {blueConversations.map((conversation) => (
+                <div key={`blue-${conversation.id}`} className="flex items-start gap-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="p-2 bg-blue-100 rounded-full">
+                    <CheckCircle className="h-4 w-4 text-blue-600" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1">
+                      <p className="text-sm font-medium text-blue-900">{conversation.patient}</p>
+                      <span className="text-xs text-blue-600">{conversation.time}</span>
+                    </div>
+                    <p className="text-sm text-blue-700 truncate mb-1">{conversation.lastMessage}</p>
+                    <div className="flex items-center gap-2">
+                      <Phone className="h-3 w-3 text-blue-500" />
+                      <span className="text-xs text-blue-600">{conversation.phone}</span>
+                      {conversation.unread && (
+                        <Badge className="bg-blue-200 text-blue-700 h-4 text-xs px-1">NUEVO</Badge>
+                      )}
+                    </div>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-slate-900">Datos en Tiempo Real</p>
-                  <p className="text-sm text-slate-600 mt-1">
-                    Portal sincronizado con {stats?.total_appointments || 0} citas totales
-                  </p>
-                  <p className="text-xs text-slate-400 mt-2">Actualización continua</p>
-                </div>
-              </div>
+              ))}
+            </div>
+            
+            <div className="mt-4 pt-3 border-t border-slate-200">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="w-full"
+                onClick={() => navigate("/panel-de-control/messages")}
+              >
+                Ver todas las conversaciones
+              </Button>
             </div>
           </CardContent>
         </Card>
