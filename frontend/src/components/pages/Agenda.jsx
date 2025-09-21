@@ -153,9 +153,17 @@ const Agenda = () => {
   });
 
   // Filter appointments by selected date if needed
-  const displayAppointments = filter === 'today' 
+  const normalizeTime = (t) => (t || '').padStart(5, '0');
+
+  const displayAppointments = (filter === 'today' 
     ? filteredAppointments.filter(apt => apt.date === selectedDate.toISOString().split('T')[0])
-    : filteredAppointments;
+    : filteredAppointments)
+    .sort((a,b) => {
+      const dateA = a.date || '';
+      const dateB = b.date || '';
+      if (dateA === dateB) return normalizeTime(a.time).localeCompare(normalizeTime(b.time));
+      return dateA.localeCompare(dateB);
+    });
 
   return (
     <div className="space-y-6">
