@@ -171,5 +171,7 @@
 ## agent_communication:
   - agent: "main"
     message: "Se actualizó backend para ordenar por fecha y hora, y frontend para que el calendario inicie lunes y filtrar por fecha seleccionada. Probar /api/appointments?start_date=YYYY-MM-DD&end_date=YYYY-MM-DD y /api/appointments/today/. Validar orden por hora ascendente y que la UI muestre solo las citas del día seleccionado."
+  - agent: "testing"
+    message: "✅ BACKEND TESTING COMPLETE: All appointment filtering and ordering functionality working correctly. Created comprehensive backend_test.py with 7 tests covering health check, sync trigger, date filtering (2025-09-22, 2025-09-23), today endpoint, stats endpoint, and upcoming endpoint. All tests passed. Key findings: Date filtering works perfectly, time sorting is correct (ascending), JSON serialization handles ObjectId properly (_id as string), Google Sheets sync gracefully handles HTTP 400 errors. System ready for frontend testing."
 
 #====================================================================================================
