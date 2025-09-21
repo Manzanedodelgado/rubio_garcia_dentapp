@@ -170,7 +170,7 @@ class BackendTester:
             
             if response.status_code == 200:
                 appointments = response.json()
-                today = datetime.now().strftime('%Y-%m-%d')
+                today = datetime.now(ZoneInfo("Europe/Madrid")).strftime('%Y-%m-%d')
                 
                 # Verify all appointments are for today
                 date_errors = []
