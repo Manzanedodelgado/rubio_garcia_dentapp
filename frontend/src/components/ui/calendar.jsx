@@ -66,6 +66,12 @@ function Calendar({
           <ChevronRight className={cn("h-4 w-4", className)} {...props} />
         ),
       }}
+      formatters={{
+        formatWeekdayName: (date) => {
+          const labels = ['D','L','M','X','J','V','S'];
+          return labels[date.getDay()];
+        },
+      }}
       {...props} />
   );
 }
