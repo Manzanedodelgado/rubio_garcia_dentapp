@@ -367,7 +367,8 @@ def create_appointments_router(db_client: AsyncIOMotorClient):
         start_date: Optional[str] = Query(None, description="Start date (YYYY-MM-DD)"),
         end_date: Optional[str] = Query(None, description="End date (YYYY-MM-DD)"),
         status: Optional[str] = Query(None, description="Appointment status"),
-        patient: Optional[str] = Query(None, description="Patient name filter")
+        patient: Optional[str] = Query(None, description="Patient name filter"),
+        limit: int = Query(1000, ge=1, le=20000, description="Max number of records to return")
     ):
         """Get appointments with optional filters"""
         try:
