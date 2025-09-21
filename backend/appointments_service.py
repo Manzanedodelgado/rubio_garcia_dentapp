@@ -429,7 +429,15 @@ def create_appointments_router(db_client: AsyncIOMotorClient):
             ]
             
             # Sort by date and time
-            upcoming.sort(key=lambda x: (x.get('date', ''), x.get('time', '')))
+            # Normalize time while sorting
+            def norm_time(t: str) -> str:
+                if not t:
+                    return ""
+                try:
+                    return datetime.strptime(t, "%H:%M").strftime("%H:%M")
+                except Exception:
+                    return t
+            upcoming.sort(key=lambda x: (x.get('date', ''), norm_time(x.get('time', ''))))
             
             return upcoming
             
