@@ -125,14 +125,16 @@ const Agenda = () => {
   }, [filter, selectedDate]);
 
   const getStatusColor = (status) => {
-    const colors = {
-      confirmed: 'bg-blue-100 text-blue-700 border border-blue-300',
-      pending: 'bg-yellow-100 text-yellow-700 border border-yellow-300',
-      completed: 'bg-emerald-100 text-emerald-700 border border-emerald-300',
-      cancelled: 'bg-rose-100 text-rose-700 border border-rose-300',
-      rescheduled: 'bg-purple-100 text-purple-700 border border-purple-300'
+    // Corporate style: dark blue background, white text
+    const base = 'bg-blue-800 text-white border border-blue-900';
+    const map = {
+      confirmed: base,
+      pending: base,
+      completed: base,
+      cancelled: base,
+      rescheduled: base
     };
-    return colors[status] || 'bg-slate-100 text-slate-700 border border-slate-300';
+    return map[status] || base;
   };
 
   const getStatusText = (status) => {
