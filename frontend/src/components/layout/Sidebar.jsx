@@ -30,7 +30,7 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
       name: "Agenda",
       path: "/panel-de-control/agenda", 
       icon: Calendar,
-      description: "Gestión de agenda",
+      description: "Agenda",
       submenu: [
         { name: "Calendario", path: "/panel-de-control/agenda" },
         { name: "Nueva Cita", path: "/panel-de-control/agenda/nueva" },
