@@ -385,31 +385,25 @@ const Agenda = () => {
                               <h3 className="text-lg font-semibold text-gray-900">
                                 {appointment.patient_name || 'Sin nombre'}
                               </h3>
-                              <Badge className={getStatusColor(appointment.status)}>
-                                {getStatusText(appointment.status)}
-                              </Badge>
                             </div>
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-gray-600">
                               <div>
                                 <strong>Tratamiento:</strong> {appointment.treatment || 'No especificado'}
                               </div>
-                              <div>
-                                <strong>Doctor:</strong> {appointment.doctor || 'No asignado'}
-                              </div>
                               {appointment.num_paciente && (
                                 <div>
                                   <strong>Número de Paciente:</strong> {appointment.num_paciente}
                                 </div>
                               )}
+                              <div>
+                                <strong>Doctor:</strong> {appointment.doctor || 'No asignado'}
+                              </div>
                               {appointment.phone && (
                                 <div>
                                   <strong>Teléfono:</strong> {appointment.phone}
                                 </div>
                               )}
-                              <div>
-                                <strong>Fuente:</strong> Google Sheets
-                              </div>
                             </div>
                             
                             {appointment.notes && (
