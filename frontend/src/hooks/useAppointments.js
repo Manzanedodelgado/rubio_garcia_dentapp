@@ -76,6 +76,8 @@ export const useAppointmentStats = () => {
 
   useEffect(() => {
     fetchStats();
+    const i = setInterval(fetchStats, 60 * 1000); // actualizar cada minuto
+    return () => clearInterval(i);
   }, [fetchStats]);
 
   const refresh = useCallback(() => {
