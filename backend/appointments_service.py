@@ -56,7 +56,11 @@ class GoogleSheetsService:
         self.db = db_client[os.environ['DB_NAME']]
         # Use the public CSV export URL for the Google Sheets
         self.sheet_url = "https://docs.google.com/spreadsheets/d/1MBDBHQ08XGuf5LxVHCFhHDagIazFkpBnxwqyEQIBJrQ/export?format=csv&gid=0"
+        self.fallback_sheet_url = "https://docs.google.com/spreadsheets/d/1MBDBHQ08XGuf5LxVHCFhHDagIazFkpBnxwqyEQIBJrQ/export?format=csv"
         self.last_update = None
+        self.last_headers = []
+        self.last_raw_rows = 0
+        self.last_fetch_message = ""
         
     async def fetch_sheet_data(self) -> List[Dict]:
         """Fetch data from Google Sheets CSV export"""
