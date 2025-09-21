@@ -92,8 +92,16 @@ const Agenda = () => {
     }
   };
 
+  const toLocalYMD = (d) => {
+    const dd = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    const y = dd.getFullYear();
+    const m = String(dd.getMonth() + 1).padStart(2, '0');
+    const day = String(dd.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  };
+
   const getCurrentFilters = () => {
-    const selectedDateStr = selectedDate.toISOString().split('T')[0];
+    const selectedDateStr = toLocalYMD(selectedDate);
     const filters = {};
     
     // Solo aplicar filtro de fecha si "today" está seleccionado
