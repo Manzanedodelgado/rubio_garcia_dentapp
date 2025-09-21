@@ -152,7 +152,7 @@
     - "Agenda: seleccionar fechas (22/09 y 23/09) y validar que no hay errores y que el filtro actúa"
     - "Sincronización: presionar 'Sincronizar' y validar no haya crashes (permite toast de error si hoja privada)"
   stuck_tasks: []
-  test_all: true
+  test_all: false
   test_priority: "high_first"
 
 ## agent_communication:
