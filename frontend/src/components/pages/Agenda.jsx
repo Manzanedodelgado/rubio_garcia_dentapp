@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 const Agenda = () => {
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState('today');
   const [searchTerm, setSearchTerm] = useState('');
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(false);
