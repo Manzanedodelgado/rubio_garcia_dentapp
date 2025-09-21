@@ -71,6 +71,11 @@ class GoogleSheetsService:
                         csv_content = await response.text()
                         return self.parse_csv_data(csv_content)
                     else:
+                        # Try fallback without gid (first sheet)
+                        async with session.get(self.fallback_sheet_url) as r2:
+                            if r2.status == 200:
+                                csv_content = await r2.text()
+                                return self.parse_csv_data(csv_content)
                         logger.error(f"Failed to fetch sheet data: HTTP {response.status}")
                         return []
         except Exception as e:
