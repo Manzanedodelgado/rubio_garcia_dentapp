@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { Calendar } from "../ui/calendar";
-import { es } from 'react-day-picker/locale';
+import { es } from 'date-fns/locale';
 import { 
   Calendar as CalendarIcon, 
   Clock, 
