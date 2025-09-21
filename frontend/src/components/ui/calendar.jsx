@@ -68,8 +68,8 @@ function Calendar({
       }}
       formatters={{
         formatWeekdayName: (date) => {
-          // Spanish 2-letter weekday names starting on Sunday index 0
-          const labels = ['do','lu','ma','mi','ju','vi','sá'];
+          // Spanish 2-letter weekday abbreviations, uppercase
+          const labels = ['DO','LU','MA','MI','JU','VI','SÁ'];
           return labels[date.getDay()];
         },
       }}
