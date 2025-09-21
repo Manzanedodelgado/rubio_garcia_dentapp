@@ -90,6 +90,34 @@ class GoogleSheetsService:
                 
         return appointments
     
+    def parse_time(self, time_str: str) -> str:
+        """Normalize time to HH:MM (24h)"""
+        if not time_str:
+            return ""
+        candidates = [
+            "%H:%M",
+            "%H.%M",
+            "%I:%M %p",
+            "%I.%M %p",
+            "%H:%M:%S",
+            "%I:%M:%S %p",
+            "%H%M",
+        ]
+        cleaned = time_str.strip()
+        for fmt in candidates:
+            try:
+                t = datetime.strptime(cleaned, fmt)
+                return t.strftime("%H:%M")
+            except ValueError:
+                continue
+        # Try to coerce simple cases like "9:0" -> 09:00
+        parts = cleaned.replace(".", ":").split(":")
+        if len(parts) >= 2 and parts[0].isdigit() and parts[1].isdigit():
+            hh = parts[0].zfill(2)
+            mm = parts[1].zfill(2)
+            return f"{hh}:{mm}"
+        return cleaned
+
     def map_appointment_data(self, row: Dict) -> Optional[Dict]:
         """Map Google Sheets columns to appointment structure"""
         try:
