@@ -88,7 +88,10 @@ const Agenda = () => {
     return filters;
   };
 
-  const handleRefresh = () => { fetchAppointments(getCurrentFilters()); };
+  const handleRefresh = () => { 
+    // Limit by selected date by default to avoid heavy loads
+    fetchAppointments(getCurrentFilters()); 
+  };
 
   useEffect(() => { fetchAppointments(getCurrentFilters()); }, [filter, selectedDate]);
 
