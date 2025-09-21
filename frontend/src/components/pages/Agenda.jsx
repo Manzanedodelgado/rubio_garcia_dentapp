@@ -114,10 +114,10 @@ const Agenda = () => {
     fetchAppointments(getCurrentFilters());
   };
 
-  // Initial load
+  // Fetch when filter changes or selectedDate changes (for 'today')
   useEffect(() => {
     fetchAppointments(getCurrentFilters());
-  }, [filter]); // Solo re-fetch cuando cambie el filtro
+  }, [filter, selectedDate]);
 
   const getStatusColor = (status) => {
     const colors = {
