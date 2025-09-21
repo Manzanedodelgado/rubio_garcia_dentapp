@@ -267,6 +267,118 @@ class BackendTester:
             self.log_test("Upcoming Endpoint", False, f"Exception: {str(e)}")
             return False
     
+    def test_sync_status_endpoint(self):
+        """Test 9: Sync Status endpoint - Get sync information and detected headers"""
+        try:
+            response = self.session.get(f"{self.base_url}/api/appointments/sync/status/")
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                # Verify required fields are present
+                required_fields = ['last_update', 'auto_sync_active', 'sync_interval_minutes', 'headers', 'row_count']
+                field_errors = []
+                
+                for field in required_fields:
+                    if field not in data:
+                        field_errors.append(f"Missing field: {field}")
+                
+                if field_errors:
+                    self.log_test("Sync Status Endpoint", False, f"Field validation errors: {field_errors}")
+                    return False
+                
+                # Verify data types
+                type_errors = []
+                if not isinstance(data.get('auto_sync_active'), bool):
+                    type_errors.append(f"auto_sync_active should be boolean, got {type(data.get('auto_sync_active'))}")
+                
+                if not isinstance(data.get('sync_interval_minutes'), int):
+                    type_errors.append(f"sync_interval_minutes should be integer, got {type(data.get('sync_interval_minutes'))}")
+                
+                if not isinstance(data.get('headers'), list):
+                    type_errors.append(f"headers should be list, got {type(data.get('headers'))}")
+                
+                if not isinstance(data.get('row_count'), int):
+                    type_errors.append(f"row_count should be integer, got {type(data.get('row_count'))}")
+                
+                if type_errors:
+                    self.log_test("Sync Status Endpoint", False, f"Type validation errors: {type_errors}")
+                    return False
+                
+                headers = data.get('headers', [])
+                row_count = data.get('row_count', 0)
+                
+                self.log_test("Sync Status Endpoint", True, 
+                            f"Status retrieved successfully. Headers: {len(headers)} columns, Row count: {row_count}")
+                
+                # Log headers for debugging
+                if headers:
+                    print(f"   Detected headers: {headers}")
+                
+                return True
+                
+            else:
+                self.log_test("Sync Status Endpoint", False, f"HTTP {response.status_code}", response.text)
+                return False
+                
+        except Exception as e:
+            self.log_test("Sync Status Endpoint", False, f"Exception: {str(e)}")
+            return False
+    
+    def test_sync_headers_endpoint(self):
+        """Test 10: Sync Headers endpoint - Get detected sheet headers only"""
+        try:
+            response = self.session.get(f"{self.base_url}/api/appointments/sync/headers/")
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                # Verify required fields are present
+                required_fields = ['headers', 'row_count']
+                field_errors = []
+                
+                for field in required_fields:
+                    if field not in data:
+                        field_errors.append(f"Missing field: {field}")
+                
+                if field_errors:
+                    self.log_test("Sync Headers Endpoint", False, f"Field validation errors: {field_errors}")
+                    return False
+                
+                # Verify data types
+                type_errors = []
+                if not isinstance(data.get('headers'), list):
+                    type_errors.append(f"headers should be list, got {type(data.get('headers'))}")
+                
+                if not isinstance(data.get('row_count'), int):
+                    type_errors.append(f"row_count should be integer, got {type(data.get('row_count'))}")
+                
+                if type_errors:
+                    self.log_test("Sync Headers Endpoint", False, f"Type validation errors: {type_errors}")
+                    return False
+                
+                headers = data.get('headers', [])
+                row_count = data.get('row_count', 0)
+                
+                self.log_test("Sync Headers Endpoint", True, 
+                            f"Headers retrieved successfully. {len(headers)} columns detected, {row_count} data rows")
+                
+                # Log exact column names for verification
+                if headers:
+                    print(f"   Exact column names: {headers}")
+                else:
+                    print("   No headers detected - may need to trigger sync first")
+                
+                return True
+                
+            else:
+                self.log_test("Sync Headers Endpoint", False, f"HTTP {response.status_code}", response.text)
+                return False
+                
+        except Exception as e:
+            self.log_test("Sync Headers Endpoint", False, f"Exception: {str(e)}")
+            return False
+    
     def check_backend_logs(self):
         """Check backend logs for errors"""
         try:
