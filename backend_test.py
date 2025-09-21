@@ -417,6 +417,12 @@ class BackendTester:
         # Test 8: Upcoming endpoint
         self.test_upcoming_endpoint()
         
+        # Test 9: Sync Status endpoint (NEW - for Google Sheets headers)
+        self.test_sync_status_endpoint()
+        
+        # Test 10: Sync Headers endpoint (NEW - for Google Sheets headers)
+        self.test_sync_headers_endpoint()
+        
         # Check for backend errors
         self.check_backend_logs()
         
