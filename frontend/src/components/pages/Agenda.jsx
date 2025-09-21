@@ -381,7 +381,7 @@ const Agenda = () => {
                             <span className="text-sm font-medium">{appointment.time || 'Sin hora'}</span>
                             <span className="text-xs text-gray-500">{appointment.date || 'Sin fecha'}</span>
                             <span className={`mt-2 text-xs px-2 py-0.5 rounded-full ${getStatusColor(appointment.status)}`}>
-                              {getStatusText(appointment.status)}
+                              {(appointment.estado_cita || getStatusText(appointment.status))}
                             </span>
                           </div>
                           
