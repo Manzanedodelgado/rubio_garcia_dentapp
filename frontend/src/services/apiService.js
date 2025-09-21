@@ -32,8 +32,6 @@ apiClient.interceptors.response.use(
   },
   (error) => {
     console.error('API Response Error:', error);
-    
-    // Handle specific error cases
     if (error.response?.status === 307) {
       console.warn('Redirect detected - this might cause infinite loops');
     } else if (error.response?.status === 500) {
@@ -41,7 +39,6 @@ apiClient.interceptors.response.use(
     } else if (error.code === 'NETWORK_ERROR' || !error.response) {
       console.error('Network Error: Could not connect to backend');
     }
-    
     return Promise.reject(error);
   }
 );
@@ -57,16 +54,13 @@ export const appointmentsAPI = {
       }
     });
 
-    // Add an explicit high limit to avoid server default truncation
     if (!queryParams.has('limit')) {
       queryParams.set('limit', '5000');
     }
     
     const queryString = queryParams.toString();
     const url = queryString ? `/appointments/?${queryString}` : '/appointments/';
-    
-    console.log('Making API request to:', url);
-    return apiClient.get(url, { timeout: 20000 }); // extend timeout for large payloads
+    return apiClient.get(url, { timeout: 20000 });
   },
 
   // Get today's appointments
@@ -83,6 +77,14 @@ export const appointmentsAPI = {
 
   // Get sync status
   getSyncStatus: () => apiClient.get('/appointments/sync/status/'),
+
+  // Update status override
+  updateStatus: (appointmentId, payload) => {
+    const params = new URLSearchParams();
+    if (payload?.status) params.set('new_status', payload.status);
+    if (payload?.estado_cita) params.set('estado_cita_text', payload.estado_cita);
+    return apiClient.post(`/appointments/${appointmentId}/status?${params.toString()}`);
+  }
 };
 
 // General API
