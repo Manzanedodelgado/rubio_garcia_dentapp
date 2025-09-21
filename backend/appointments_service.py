@@ -273,7 +273,11 @@ class GoogleSheetsService:
             if status:
                 query["status"] = status
             
-            appointments = await self.db.appointments.find(query).to_list(1000)
+            # Sort by date then time ascending
+            appointments = await self.db.appointments.find(query).sort([
+                ("date", 1),
+                ("time", 1)
+            ]).to_list(1000)
             
             # Convert ObjectId to string for JSON serialization
             for appointment in appointments:
