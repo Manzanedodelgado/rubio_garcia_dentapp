@@ -45,6 +45,13 @@ const LoginPage = () => {
         localStorage.setItem("userName", validCredentials.name);
         localStorage.setItem("userRole", validCredentials.role);
         localStorage.setItem("avatarColor", validCredentials.avatarColor);
+        // Remember Me
+        localStorage.setItem('rememberMe', rememberMe ? 'true' : 'false');
+        if (rememberMe) {
+          localStorage.setItem('rememberedUser', email);
+        } else {
+          localStorage.removeItem('rememberedUser');
+        }
         toast({
           title: "Acceso Exitoso",
           description: `Bienvenido ${validCredentials.name}`,
