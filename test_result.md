@@ -132,15 +132,18 @@
         comment: "✅ LOGIN WORKING PERFECTLY: Branding shows 'Rubio García Dental' correctly, placeholder shows 'Usuario o correo electrónico', login with admin@rubiogarcia.com/dental123 successful, redirects to /panel-de-control without errors."
   - task: "Agenda: seleccionar fecha filtra por ese día y ordena por hora"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/components/pages/Agenda.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: false
         agent: "main"
         comment: "Se usa toLocalYMD para evitar TZ y se solicita al backend start=end=fecha."
+      - working: true
+        agent: "testing"
+        comment: "✅ DATE FILTERING WORKING: Clicking calendar dates triggers proper API calls with start_date=end_date=YYYY-MM-DD format. Filter buttons (Hoy, Confirmadas, Pendientes, Completadas) all functional. API responses successful (200 status). Date selection activates 'today' filter correctly."
 
 ## test_plan:
   current_focus:
