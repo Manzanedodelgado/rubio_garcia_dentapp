@@ -26,6 +26,7 @@ class AppointmentBase(BaseModel):
     # Extended fields from Google Sheets
     num_paciente: Optional[str] = ""
     last_name: Optional[str] = ""
+    estado_cita: Optional[str] = ""
     registro: Optional[str] = ""
     cit_mod: Optional[str] = ""
     fecha_alta: Optional[str] = ""
