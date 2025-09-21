@@ -170,7 +170,7 @@ const Agenda = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Gestión de Agenda</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Agenda</h1>
           <p className="text-gray-600">Administra las citas sincronizadas desde Google Sheets</p>
         </div>
         <div className="flex space-x-2">
