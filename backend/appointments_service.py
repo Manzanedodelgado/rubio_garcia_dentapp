@@ -165,9 +165,9 @@ class GoogleSheetsService:
         s = status_str.lower().strip()
         direct = {
             'confirmada': 'confirmed','confirmed': 'confirmed',
-            'completada': 'completed','completed': 'completed',
+            'finalizada': 'completed','completada': 'completed','completed': 'completed',
             'cancelada': 'cancelled','cancelled': 'cancelled',
-            'pendiente': 'pending','pending': 'pending',
+            'planificada': 'pending','pendiente': 'pending','pending': 'pending',
             'reagendada': 'rescheduled','rescheduled': 'rescheduled'
         }
         if s in direct:
