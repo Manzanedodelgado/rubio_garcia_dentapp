@@ -164,7 +164,7 @@ const Agenda = () => {
   const normalizeTime = (t) => (t || '').padStart(5, '0');
 
   const displayAppointments = (filter === 'today' 
-    ? filteredAppointments.filter(apt => apt.date === selectedDate.toISOString().split('T')[0])
+    ? filteredAppointments.filter(apt => apt.date === toLocalYMD(selectedDate))
     : filteredAppointments)
     .sort((a,b) => {
       const dateA = a.date || '';
