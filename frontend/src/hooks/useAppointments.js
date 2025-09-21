@@ -178,6 +178,8 @@ export const useSync = () => {
 
   useEffect(() => {
     fetchSyncStatus();
+    const i = setInterval(fetchSyncStatus, 60 * 1000); // refrescar estado cada minuto
+    return () => clearInterval(i);
   }, [fetchSyncStatus]);
 
   return {
