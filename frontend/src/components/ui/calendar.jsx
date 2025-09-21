@@ -69,7 +69,8 @@ function Calendar({
       formatters={{
         formatWeekdayName: (date) => {
           // Spanish 2-letter weekday abbreviations, uppercase
-          const labels = ['DO','LU','MA','MI','JU','VI','SÁ'];
+          // Use 3-letter Spanish weekday names to avoid browser auto-translate glitches
+          const labels = ['dom','lun','mar','mié','jue','vie','sáb'];
           return labels[date.getDay()];
         },
       }}
