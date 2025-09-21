@@ -101,6 +101,20 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 
+## backend:
+  - task: "Consultar total de citas sincronizadas (stats endpoint)"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/appointments_service.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Necesitamos confirmar el total de citas desde /api/appointments/stats/."
+
+
 ## frontend:
   - task: "Calendario: etiquetas correctas (lun, mar, mié, jue, vie, sáb, dom) y semana inicia en lunes"
     implemented: true
