@@ -238,26 +238,32 @@ class GoogleSheetsService:
         return date_str
     
     def parse_status(self, status_str: str) -> str:
-        """Normalize status values"""
+        """Normalize status values with tolerance to typos and languages"""
         if not status_str:
             return 'pending'
-            
-        status_lower = status_str.lower().strip()
-        
-        status_mappings = {
-            'confirmada': 'confirmed',
-            'confirmed': 'confirmed',
-            'completada': 'completed', 
-            'completed': 'completed',
-            'cancelada': 'cancelled',
-            'cancelled': 'cancelled',
-            'pendiente': 'pending',
-            'pending': 'pending',
-            'reagendada': 'rescheduled',
-            'rescheduled': 'rescheduled'
+        s = status_str.lower().strip()
+        # Direct mapping
+        direct = {
+            'confirmada': 'confirmed', 'confirmed': 'confirmed',
+            'completada': 'completed', 'completed': 'completed',
+            'cancelada': 'cancelled', 'cancelled': 'cancelled',
+            'pendiente': 'pending', 'pending': 'pending',
+            'reagendada': 'rescheduled', 'rescheduled': 'rescheduled'
         }
-        
-        return status_mappings.get(status_lower, 'pending')
+        if s in direct:
+            return direct[s]
+        # Tolerant matching by substring
+        if 'confirm' in s or 'confirma' in s:
+            return 'confirmed'
+        if 'complet' in s or 'realizad' in s:
+            return 'completed'
+        if 'cancel' in s or 'anulad' in s:
+            return 'cancelled'
+        if 'reagen' in s or 'reprog' in s or 'mover' in s:
+            return 'rescheduled'
+        if 'pend' in s or 'pendi' in s or 'pendien' in s:
+            return 'pending'
+        return 'pending'
     
     async def sync_appointments(self) -> Dict:
         """Sync appointments from Google Sheets to MongoDB"""
