@@ -205,7 +205,13 @@ const Agenda = () => {
               <Calendar
                 mode="single"
                 selected={selectedDate}
-                onSelect={setSelectedDate}
+                onSelect={(date) => {
+                  setSelectedDate(date || new Date());
+                  // When user selects a day, switch to 'today' filter to show that specific date
+                  setFilter('today');
+                  // Fetch filtered by the selected date
+                  setTimeout(() => fetchAppointments({ start_date: (date || new Date()).toISOString().split('T')[0], end_date: (date || new Date()).toISOString().split('T')[0] }), 0);
+                }}
                 className="rounded-md border"
                 disabled={(date) => date < new Date("1900-01-01")}
               />
