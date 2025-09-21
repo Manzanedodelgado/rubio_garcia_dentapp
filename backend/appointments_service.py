@@ -427,11 +427,21 @@ def create_appointments_router(db_client: AsyncIOMotorClient):
 
     @router.get("/sync/status/")
     async def get_sync_status():
-        """Get last sync information"""
+        """Get last sync information and detected headers"""
         return {
             "last_update": sheets_service.last_update.isoformat() if sheets_service.last_update else None,
             "auto_sync_active": True,
-            "sync_interval_minutes": 5
+            "sync_interval_minutes": 5,
+            "headers": getattr(sheets_service, 'last_headers', []),
+            "row_count": getattr(sheets_service, 'last_raw_rows', 0),
+        }
+
+    @router.get("/sync/headers/")
+    async def get_sync_headers():
+        """Return last detected sheet headers only"""
+        return {
+            "headers": getattr(sheets_service, 'last_headers', []),
+            "row_count": getattr(sheets_service, 'last_raw_rows', 0)
         }
 
     @router.get("/upcoming/", response_model=List[Appointment])
