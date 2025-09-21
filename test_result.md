@@ -101,6 +101,55 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 
+## frontend:
+  - task: "Calendario: etiquetas correctas (lun, mar, mié, jue, vie, sáb, dom) y semana inicia en lunes"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/ui/calendar.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Se añadieron formatters personalizados para evitar auto-traducciones (dom/lun/mar/mié/jue/vie/sáb)."
+  - task: "Login: marca unificada 'Rubio García Dental' y placeholders correctos"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/LoginPage.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Se centralizó marca con constantes y se cambió el placeholder a 'Usuario o correo electrónico'."
+  - task: "Agenda: seleccionar fecha filtra por ese día y ordena por hora"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/pages/Agenda.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Se usa toLocalYMD para evitar TZ y se solicita al backend start=end=fecha."
+
+## test_plan:
+  current_focus:
+    - "UI: flujo de login y navegación completa (Panel, Agenda, Nueva Cita, Historial, Pacientes, Mensajes, Configuración, Perfil)"
+    - "Calendario: verificar cabecera de días en español y que empiece en lunes"
+    - "Agenda: seleccionar fechas (22/09 y 23/09) y validar que no hay errores y que el filtro actúa"
+    - "Sincronización: presionar 'Sincronizar' y validar no haya crashes (permite toast de error si hoja privada)"
+  stuck_tasks: []
+  test_all: true
+  test_priority: "high_first"
+
+## agent_communication:
+  - agent: "main"
+    message: "Solicito pruebas UI completas: login con admin@rubiogarcia.com/dental123, navegar por todas las secciones, validar calendario y filtros, y que no existan errores JS visibles. Capturar capturas y logs."
+
 ## user_problem_statement: "Cambiar 'Orden del día' por 'Agenda'. Calendario debe empezar en lunes y al seleccionar una fecha (p.ej. 22/09 y 23/09) mostrar solo las citas de ese día desde Google Sheets, ordenadas por hora."
 
 ## backend:
