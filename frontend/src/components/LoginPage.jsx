@@ -7,6 +7,7 @@ import { User, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "../hooks/use-toast";
 import { mockData } from "../data/mockData";
+import { BRAND_NAME, PORTAL_SUBTITLE } from "../constants/branding";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -69,9 +70,9 @@ const LoginPage = () => {
           </div>
           
           <h2 className="text-2xl font-bold text-slate-800 mb-2">
-            RUBIO GARCÍA DENTAL
+            {BRAND_NAME}
           </h2>
-          <p className="text-slate-600 text-base mb-6">Portal Profesional</p>
+          <p className="text-slate-600 text-base mb-6">{PORTAL_SUBTITLE}</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
@@ -83,7 +84,7 @@ const LoginPage = () => {
               </div>
               <Input
                 type="text"
-                placeholder="Usuario o Email"
+                placeholder="Usuario o correo electrónico"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="border-0 focus-visible:ring-0 flex-1 bg-transparent"
