@@ -182,15 +182,18 @@
 ## frontend:
   - task: "Agenda: seleccionar fecha filtra por ese día; calendario en español y semana inicia lunes; listas ordenadas por hora"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/components/pages/Agenda.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: false
         agent: "main"
         comment: "Al seleccionar un día se activa filtro 'today' y se consulta backend con start_date=end_date=YYYY-MM-DD. Se ordena por fecha y hora en UI."
+      - working: true
+        agent: "testing"
+        comment: "✅ AGENDA FULLY FUNCTIONAL: Date selection works correctly, calendar in Spanish with Monday start confirmed, all filter buttons working, sync functionality operational with proper toast notifications, navigation to Nueva Cita and Historial successful with forms present."
   - task: "UI Calendar global: locale es y weekStartsOn=1"
     implemented: true
     working: "NA"
