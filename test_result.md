@@ -117,6 +117,18 @@
         agent: "testing"
         comment: "✅ STATS ENDPOINT WORKING PERFECTLY: GET /api/appointments/stats/ returns correct JSON response with total_appointments=3089 and today_appointments=0. All fields are integers as expected. Verified source=google_sheets is being used correctly. Full JSON response: {'total_appointments': 3089, 'today_appointments': 0, 'confirmed_appointments': 0, 'pending_appointments': 3089, 'completed_appointments': 0, 'cancelled_appointments': 0}. Endpoint accessible via REACT_APP_BACKEND_URL (https://tooth-tracker-10.preview.emergentagent.com)."
 
+  - task: "Google Sheets headers detection endpoints"
+    implemented: true
+    working: true
+    file: "/app/backend/appointments_service.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ GOOGLE SHEETS HEADERS ENDPOINTS WORKING PERFECTLY: Both GET /api/appointments/sync/status/ and GET /api/appointments/sync/headers/ return correct responses. Status endpoint provides comprehensive sync information including headers array and row_count. Headers endpoint returns exact column names from active Google Sheet. Detected 14 columns: ['Registro', 'CitMod', 'FechaAlta', 'NumPac', 'Apellidos', 'Nombre', 'TelMovil', 'Fecha', 'Hora', 'EstadoCita', 'Tratamiento', 'Odontologo', 'Notas', 'Duracion'] with 3089 data rows. Both endpoints accessible via REACT_APP_BACKEND_URL and return proper JSON format."
+
 
 ## frontend:
   - task: "Calendario: etiquetas correctas (lun, mar, mié, jue, vie, sáb, dom) y semana inicia en lunes"
