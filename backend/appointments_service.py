@@ -151,7 +151,7 @@ class GoogleSheetsService:
             appointment = {
                 'external_id': f"{mapped_data.get('fecha', '')}_{mapped_data.get('hora', '')}_{mapped_data.get('paciente', '')}".replace(' ', '_'),
                 'date': self.parse_date(mapped_data.get('fecha', '')),
-                'time': mapped_data.get('hora', ''),
+                'time': self.parse_time(mapped_data.get('hora', '')),
                 'patient_name': mapped_data.get('paciente', ''),
                 'treatment': mapped_data.get('tratamiento', ''),
                 'doctor': mapped_data.get('doctor', ''),
