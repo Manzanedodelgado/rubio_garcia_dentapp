@@ -131,6 +131,9 @@ class GoogleSheetsService:
         # Try to coerce simple cases like "9:0" -> 09:00
         parts = cleaned.replace(".", ":").split(":")
         if len(parts) >= 2 and parts[0].isdigit() and parts[1].isdigit():
+            # Log header mapping for diagnostics
+            logger.info(f"Google Sheets headers detected: {self.last_headers}")
+
             hh = parts[0].zfill(2)
             mm = parts[1].zfill(2)
             return f"{hh}:{mm}"
