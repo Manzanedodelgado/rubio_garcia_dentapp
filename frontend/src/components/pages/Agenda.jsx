@@ -100,7 +100,7 @@ const Agenda = () => {
     const map = { confirmed: base, pending: base, completed: base, cancelled: base, rescheduled: base };
     return map[status] || base;
   };
-  const getStatusText = (status) => ({ confirmed: 'Confirmada', pending: 'Pendiente', completed: 'Completada', cancelled: 'Cancelada', rescheduled: 'Reagendada' }[status] || status);
+  const getStatusText = (status) => ({ confirmed: 'Confirmada', pending: 'Planificada', completed: 'Finalizada', cancelled: 'Cancelada', rescheduled: 'Reagendada' }[status] || status);
 
   const filteredAppointments = appointments.filter(apt => {
     if (!searchTerm) return true;
