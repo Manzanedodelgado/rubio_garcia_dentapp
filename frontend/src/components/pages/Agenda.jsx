@@ -378,6 +378,9 @@ const Agenda = () => {
                             <Clock className="h-5 w-5 text-gray-400 mb-1" />
                             <span className="text-sm font-medium">{appointment.time || 'Sin hora'}</span>
                             <span className="text-xs text-gray-500">{appointment.date || 'Sin fecha'}</span>
+                            <span className={`mt-2 text-xs px-2 py-0.5 rounded-full ${getStatusColor(appointment.status)}`}>
+                              {getStatusText(appointment.status)}
+                            </span>
                           </div>
                           
                           <div className="flex-1">
