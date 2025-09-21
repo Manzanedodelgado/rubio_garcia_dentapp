@@ -309,7 +309,8 @@ class GoogleSheetsService:
     async def get_appointments(self, 
                              start_date: Optional[str] = None, 
                              end_date: Optional[str] = None,
-                             status: Optional[str] = None) -> List[Dict]:
+                             status: Optional[str] = None,
+                             limit: int = 10000) -> List[Dict]:
         """Get appointments with optional filters"""
         try:
             query = {"source": "google_sheets"}
@@ -327,11 +328,12 @@ class GoogleSheetsService:
             if status:
                 query["status"] = status
             
-            # Sort by date then time ascending
-            appointments = await self.db.appointments.find(query).sort([
+            # Sort by date then time ascending and apply limit (default 10k)
+            cursor = self.db.appointments.find(query).sort([
                 ("date", 1),
                 ("time", 1)
-            ]).to_list(1000)
+            ]).limit(limit)
+            appointments = await cursor.to_list(length=limit)
             
             # Convert ObjectId to string for JSON serialization
             for appointment in appointments:
