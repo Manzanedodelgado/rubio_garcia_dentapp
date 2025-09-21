@@ -149,6 +149,8 @@
 ## agent_communication:
   - agent: "main"
     message: "Solicito pruebas UI completas: login con admin@rubiogarcia.com/dental123, navegar por todas las secciones, validar calendario y filtros, y que no existan errores JS visibles. Capturar capturas y logs."
+  - agent: "testing"
+    message: "✅ COMPREHENSIVE E2E TESTING COMPLETED: All major functionality working correctly. Login successful with admin@rubiogarcia.com/dental123, redirects to /panel-de-control without errors. All sidebar navigation working (Agenda, Pacientes, Analíticas, IA Assistant, Mensajes, Facturación, Configuración, Perfil). Calendar shows correct Spanish headers (lun, mar, mié, jue, vie, sáb, dom) and starts on Monday. Date selection triggers proper filtering with API calls. All filter buttons (Hoy, Confirmadas, Pendientes, Completadas) working. Sync button works with proper toast notifications. Nueva Cita and Historial navigation successful with forms/filters present. Dark mode toggle functional. Profile edit works with persistence in localStorage and header updates. Panel de Control shows correct welcome message and dashboard elements. Only minor issue: WebSocket connection errors (non-critical, doesn't affect functionality). All API calls successful (200 responses). System ready for production use."
 
 ## user_problem_statement: "Cambiar 'Orden del día' por 'Agenda'. Calendario debe empezar en lunes y al seleccionar una fecha (p.ej. 22/09 y 23/09) mostrar solo las citas de ese día desde Google Sheets, ordenadas por hora."
 
