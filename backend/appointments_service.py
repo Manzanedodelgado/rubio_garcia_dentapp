@@ -6,9 +6,11 @@ from typing import List, Dict, Optional
 import logging
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Body
 from pydantic import BaseModel, Field
 import uuid
+import re
+from uuid import uuid4, uuid5, NAMESPACE_DNS
 
 logger = logging.getLogger(__name__)
 
@@ -59,6 +61,27 @@ class SyncResult(BaseModel):
     synced: int
     message: str
     last_update: Optional[str] = None
+
+# Patients models
+class PatientBase(BaseModel):
+    first_name: str = ""
+    last_name: str = ""
+    full_name: str = ""
+    phone: str = ""
+    email: str = ""
+    address: str = ""
+    num_paciente: str = ""
+    notes: str = ""
+
+class Patient(PatientBase):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()), alias="_id")
+    source: str = "manual"  # manual | derived
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+    class Config:
+        allow_population_by_field_name = True
+        json_encoders = { datetime: lambda v: v.isoformat() }
 
 # =====================
 # Google Sheets Service
@@ -316,116 +339,158 @@ class GoogleSheetsService:
                 await asyncio.sleep(60)
 
 # =====================
-# Router setup
+# Patients Router
 # =====================
-def create_appointments_router(db_client: AsyncIOMotorClient):
-    router = APIRouter(prefix="/api/appointments", tags=["appointments"])
-    sheets_service = GoogleSheetsService(db_client)
+def normalize_phone(phone: str) -> str:
+    if not phone:
+        return ""
+    return re.sub(r"\D+", "", phone)
 
-    @router.get("/", response_model=List[Appointment])
-    async def get_appointments(
-        start_date: Optional[str] = Query(None, description="Start date (YYYY-MM-DD)"),
-        end_date: Optional[str] = Query(None, description="End date (YYYY-MM-DD)"),
-        status: Optional[str] = Query(None, description="Appointment status"),
-        patient: Optional[str] = Query(None, description="Patient name filter"),
-        limit: int = Query(1000, ge=1, le=20000, description="Max number of records to return")
-    ):
-        try:
-            appointments = await sheets_service.get_appointments(start_date, end_date, status, limit)
-            if patient:
-                patient_lower = patient.lower()
-                appointments = [apt for apt in appointments if patient_lower in apt.get('patient_name','').lower()]
-            return appointments
-        except Exception as e:
-            logger.error(f"Error in get_appointments: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"Error fetching appointments: {str(e)}")
+def make_patient_key(num_paciente: str, full_name: str, phone: str) -> str:
+    if num_paciente:
+        return f"num:{num_paciente.strip()}"
+    name_key = (full_name or "").strip().lower()
+    phone_key = normalize_phone(phone)
+    return f"np:{name_key}|{phone_key}"
 
-    @router.get("/today/", response_model=List[Appointment])
-    async def get_today_appointments():
-        today = datetime.now().strftime('%Y-%m-%d')
-        try:
-            appointments = await sheets_service.get_appointments(start_date=today, end_date=today)
-            return appointments
-        except Exception as e:
-            logger.error(f"Error in get_today_appointments: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"Error fetching today's appointments: {str(e)}")
+def split_name(full_name: str) -> Dict[str,str]:
+    parts = (full_name or "").strip().split()
+    if not parts:
+        return {"first_name":"","last_name":""}
+    if len(parts) == 1:
+        return {"first_name": parts[0], "last_name": ""}
+    return {"first_name": parts[0], "last_name": " ".join(parts[1:])}
 
-    @router.get("/stats/", response_model=AppointmentStats)
-    async def get_appointment_stats():
-        try:
-            db = sheets_service.db
-            total = await db.appointments.count_documents({"source": "google_sheets"})
-            today = datetime.now().strftime('%Y-%m-%d')
-            today_count = await db.appointments.count_documents({"source": "google_sheets","date": today})
-            confirmed = await db.appointments.count_documents({"source": "google_sheets","status": "confirmed"})
-            pending = await db.appointments.count_documents({"source": "google_sheets","status": "pending"})
-            completed = await db.appointments.count_documents({"source": "google_sheets","status": "completed"})
-            cancelled = await db.appointments.count_documents({"source": "google_sheets","status": "cancelled"})
-            stats = AppointmentStats(
-                total_appointments=total,
-                today_appointments=today_count,
-                confirmed_appointments=confirmed,
-                pending_appointments=pending,
-                completed_appointments=completed,
-                cancelled_appointments=cancelled
-            )
-            logger.info(f"Stats calculated: {stats}")
-            return stats
-        except Exception as e:
-            logger.error(f"Error fetching stats: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"Error fetching stats: {str(e)}")
+class PatientCreate(PatientBase):
+    pass
 
-    @router.post("/sync/", response_model=SyncResult)
-    async def sync_appointments():
-        try:
-            result = await sheets_service.sync_appointments()
-            return SyncResult(**result)
-        except Exception as e:
-            logger.error(f"Error in sync_appointments: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"Sync failed: {str(e)}")
+class PatientUpdate(PatientBase):
+    pass
 
-    @router.get("/sync/status/")
-    async def get_sync_status():
-        return {
-            "last_update": sheets_service.last_update.isoformat() if sheets_service.last_update else None,
-            "auto_sync_active": True,
-            "sync_interval_minutes": 5,
-            "headers": getattr(sheets_service, 'last_headers', []),
-            "row_count": getattr(sheets_service, 'last_raw_rows', 0),
+def create_patients_router(db_client: AsyncIOMotorClient):
+    router = APIRouter(prefix="/api/patients", tags=["patients"])
+    db = db_client[os.environ['DB_NAME']]
+
+    @router.get("/")
+    async def list_patients():
+        # 1) Load manual patients first (take precedence)
+        manual_docs = await db.patients.find().to_list(5000)
+        patients_map: Dict[str, Dict] = {}
+        for doc in manual_docs:
+            key = make_patient_key(doc.get('num_paciente',''), doc.get('full_name','') or f"{doc.get('first_name','')} {doc.get('last_name','')}", doc.get('phone',''))
+            out = {
+                "_id": str(doc.get('_id')),
+                "first_name": doc.get('first_name',''),
+                "last_name": doc.get('last_name',''),
+                "full_name": doc.get('full_name') or f"{doc.get('first_name','')} {doc.get('last_name','')}".strip(),
+                "phone": doc.get('phone',''),
+                "email": doc.get('email',''),
+                "address": doc.get('address',''),
+                "num_paciente": doc.get('num_paciente',''),
+                "notes": doc.get('notes',''),
+                "source": "manual",
+            }
+            patients_map[key] = out
+        # 2) Derive from appointments and fill gaps
+        cursor = db.appointments.find({}, {"patient_name":1, "last_name":1, "phone":1, "num_paciente":1})
+        async for a in cursor:
+            full_name = a.get('patient_name','')
+            phone = a.get('phone','')
+            nump = a.get('num_paciente','')
+            key = make_patient_key(nump, full_name, phone)
+            if key in patients_map:
+                # fill missing fields only
+                p = patients_map[key]
+                if not p.get('full_name') and full_name:
+                    p['full_name'] = full_name
+                if not p.get('phone') and phone:
+                    p['phone'] = phone
+                if not p.get('num_paciente') and nump:
+                    p['num_paciente'] = nump
+                continue
+            # create derived entry
+            name_parts = split_name(full_name)
+            derived_id = str(uuid5(NAMESPACE_DNS, key))
+            patients_map[key] = {
+                "_id": derived_id,
+                "first_name": name_parts['first_name'],
+                "last_name": name_parts['last_name'],
+                "full_name": full_name,
+                "phone": phone,
+                "email": "",
+                "address": "",
+                "num_paciente": nump,
+                "notes": "",
+                "source": "derived",
+            }
+        return list(patients_map.values())
+
+    @router.post("/", response_model=Patient)
+    async def create_patient(payload: PatientCreate = Body(...)):
+        now = datetime.utcnow()
+        full_name = payload.full_name or f"{payload.first_name} {payload.last_name}".strip()
+        key = make_patient_key(payload.num_paciente, full_name, payload.phone)
+        # Upsert by key: store the computed key to prevent duplicates
+        doc = {
+            "first_name": payload.first_name,
+            "last_name": payload.last_name,
+            "full_name": full_name,
+            "phone": payload.phone,
+            "email": payload.email,
+            "address": payload.address,
+            "num_paciente": payload.num_paciente,
+            "notes": payload.notes,
+            "key": key,
+            "source": "manual",
+            "created_at": now,
+            "updated_at": now,
         }
+        existing = await db.patients.find_one({"key": key})
+        if existing:
+            await db.patients.update_one({"_id": existing["_id"]}, {"$set": doc})
+            existing.update(doc)
+            existing["_id"] = str(existing["_id"])
+            return Patient(**existing)
+        result = await db.patients.insert_one(doc)
+        doc["_id"] = str(result.inserted_id)
+        return Patient(**doc)
 
-    @router.get("/sync/headers/")
-    async def get_sync_headers():
-        return {"headers": getattr(sheets_service, 'last_headers', []), "row_count": getattr(sheets_service, 'last_raw_rows', 0)}
+    @router.put("/{patient_id}", response_model=Patient)
+    async def update_patient(patient_id: str, payload: PatientUpdate = Body(...)):
+        # If patient exists manual -> update; if it's a derived id (uuid5), create or upsert manual by key
+        full_name = payload.full_name or f"{payload.first_name} {payload.last_name}".strip()
+        key = make_patient_key(payload.num_paciente, full_name, payload.phone)
+        now = datetime.utcnow()
+        doc_update = {
+            "first_name": payload.first_name,
+            "last_name": payload.last_name,
+            "full_name": full_name,
+            "phone": payload.phone,
+            "email": payload.email,
+            "address": payload.address,
+            "num_paciente": payload.num_paciente,
+            "notes": payload.notes,
+            "key": key,
+            "source": "manual",
+            "updated_at": now,
+        }
+        existing = await db.patients.find_one({"_id": patient_id})
+        if existing:
+            await db.patients.update_one({"_id": patient_id}, {"$set": doc_update})
+            existing.update(doc_update)
+            existing["_id"] = str(existing["_id"])
+            return Patient(**existing)
+        # Upsert by key
+        existing_by_key = await db.patients.find_one({"key": key})
+        if existing_by_key:
+            await db.patients.update_one({"_id": existing_by_key["_id"]}, {"$set": doc_update})
+            existing_by_key.update(doc_update)
+            existing_by_key["_id"] = str(existing_by_key["_id"])
+            return Patient(**existing_by_key)
+        # Create new manual entry
+        doc_update["created_at"] = now
+        result = await db.patients.insert_one(doc_update)
+        doc_update["_id"] = str(result.inserted_id)
+        return Patient(**doc_update)
 
-    @router.get("/upcoming/", response_model=List[Appointment])
-    async def get_upcoming_appointments(days: int = Query(7, description="Number of days ahead")):
-        try:
-            start_date = datetime.now().strftime('%Y-%m-%d')
-            end_date = (datetime.now() + timedelta(days=days)).strftime('%Y-%m-%d')
-            appointments = await sheets_service.get_appointments(start_date=start_date, end_date=end_date)
-            upcoming = [apt for apt in appointments if apt.get('status') in ['confirmed','pending']]
-            def norm_time(t: str) -> str:
-                if not t: return ""
-                try: return datetime.strptime(t, "%H:%M").strftime("%H:%M")
-                except Exception: return t
-            upcoming.sort(key=lambda x: (x.get('date',''), norm_time(x.get('time',''))))
-            return upcoming
-        except Exception as e:
-            logger.error(f"Error in get_upcoming_appointments: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"Error fetching upcoming appointments: {str(e)}")
-
-    @router.post("/{appointment_id}/status")
-    async def update_status(appointment_id: str, new_status: str = Query(...), estado_cita_text: Optional[str] = Query(None)):
-        try:
-            # Persist override so it survives future syncs
-            await sheets_service.set_status_override(appointment_id, new_status, estado_cita_text)
-            return {"success": True, "appointment_id": appointment_id, "status": new_status, "estado_cita": estado_cita_text or new_status}
-        except Exception as e:
-            logger.error(f"Error updating status: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"Failed to update status: {str(e)}")
-
-    async def start_background_sync():
-        asyncio.create_task(sheets_service.start_auto_sync(interval_minutes=5))
-    router.start_background_sync = start_background_sync
     return router

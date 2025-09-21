@@ -45,7 +45,6 @@ apiClient.interceptors.response.use(
 
 // Appointments API
 export const appointmentsAPI = {
-  // Get all appointments with filters
   getAll: (params = {}) => {
     const queryParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
@@ -53,32 +52,18 @@ export const appointmentsAPI = {
         queryParams.append(key, value);
       }
     });
-
     if (!queryParams.has('limit')) {
       queryParams.set('limit', '5000');
     }
-    
     const queryString = queryParams.toString();
     const url = queryString ? `/appointments/?${queryString}` : '/appointments/';
-    return apiClient.get(url, { timeout: 20000 });
+    return apiClient.get(url);
   },
-
-  // Get today's appointments
   getToday: () => apiClient.get('/appointments/today/'),
-
-  // Get upcoming appointments
   getUpcoming: (days = 7) => apiClient.get(`/appointments/upcoming/?days=${days}`),
-
-  // Get appointment statistics
   getStats: () => apiClient.get('/appointments/stats/'),
-
-  // Trigger manual sync
   sync: () => apiClient.post('/appointments/sync/'),
-
-  // Get sync status
   getSyncStatus: () => apiClient.get('/appointments/sync/status/'),
-
-  // Update status override
   updateStatus: (appointmentId, payload) => {
     const params = new URLSearchParams();
     if (payload?.status) params.set('new_status', payload.status);
@@ -87,12 +72,16 @@ export const appointmentsAPI = {
   }
 };
 
+// Patients API
+export const patientsAPI = {
+  getAll: () => apiClient.get('/patients/'),
+  create: (data) => apiClient.post('/patients/', data),
+  update: (id, data) => apiClient.put(`/patients/${id}`, data),
+};
+
 // General API
 export const generalAPI = {
-  // Health check
   health: () => apiClient.get('/health'),
-
-  // Root endpoint
   root: () => apiClient.get('/'),
 };
 

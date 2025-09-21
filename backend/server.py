@@ -10,7 +10,7 @@ from typing import List
 import uuid
 from datetime import datetime
 import asyncio
-from appointments_service import create_appointments_router
+from appointments_service import create_appointments_router, create_patients_router
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -65,9 +65,11 @@ async def health_check():
 # Include the router in the main app
 app.include_router(api_router)
 
-# Include appointments router
+# Include appointments and patients routers
 appointments_router = create_appointments_router(client)
+patients_router = create_patients_router(client)
 app.include_router(appointments_router)
+app.include_router(patients_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -94,7 +96,10 @@ async def startup_event():
     try:
         await db.appointments.create_index([("date", 1), ("time", 1)])
         await db.appointments.create_index([("status", 1)])
-        logger.info("MongoDB indexes ensured for appointments")
+        await db.patients.create_index([("key", 1)], unique=True)
+        await db.patients.create_index([("num_paciente", 1)])
+        await db.patients.create_index([("phone", 1)])
+        logger.info("MongoDB indexes ensured for appointments and patients")
     except Exception as e:
         logger.error(f"Failed to ensure MongoDB indexes: {e}")
 
