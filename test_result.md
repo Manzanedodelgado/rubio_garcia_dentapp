@@ -106,15 +106,18 @@
 ## backend:
   - task: "Filtrado por fecha y ordenación por hora en citas (Google Sheets)"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/appointments_service.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: false
         agent: "main"
         comment: "Actualizado get_appointments para ordenar por date asc + time asc en Mongo. Añadida normalización de hora (parse_time) y ordenación robusta en /upcoming. Columnas mapeadas: Fecha y Hora."
+      - working: true
+        agent: "testing"
+        comment: "✅ BACKEND TESTS PASSED: All 7 tests successful. Health check OK. Sync handles empty data gracefully (HTTP 400 from Google Sheets but no crashes). Date filtering works correctly (2025-09-22 returns 1 appointment, 2025-09-23 returns 0). Time sorting verified - appointments sorted by time ascending. All JSON fields present (_id as string, no ObjectId issues). Stats endpoint returns integers. Upcoming endpoint filters confirmed/pending and sorts by date+time. Backend logs show Google Sheets HTTP 400 but system handles gracefully."
 
 ## frontend:
   - task: "Agenda: seleccionar fecha filtra por ese día; calendario en español y semana inicia lunes; listas ordenadas por hora"
