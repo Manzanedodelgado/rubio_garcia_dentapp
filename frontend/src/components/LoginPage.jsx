@@ -12,6 +12,7 @@ import { BRAND_NAME, PORTAL_SUBTITLE } from "../constants/branding";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
