@@ -90,6 +90,14 @@ async def startup_event():
     logger.info("Starting Rubio García Dental Portal API")
     logger.info("Initializing Google Sheets sync...")
     
+    # Create indexes for performance on large collections
+    try:
+        await db.appointments.create_index([("date", 1), ("time", 1)])
+        await db.appointments.create_index([("status", 1)])
+        logger.info("MongoDB indexes ensured for appointments")
+    except Exception as e:
+        logger.error(f"Failed to ensure MongoDB indexes: {e}")
+
     # Start background sync task
     await appointments_router.start_background_sync()
     logger.info("Background sync task started")
