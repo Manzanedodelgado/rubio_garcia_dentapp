@@ -144,14 +144,14 @@ class GoogleSheetsService:
         try:
             # Expected column mappings - adjust based on actual sheet structure
             column_mappings = {
-                'fecha': ['Fecha', 'Date', 'fecha', 'FECHA'],
-                'hora': ['Hora', 'Time', 'hora', 'HORA'],
-                'paciente': ['Paciente', 'Patient', 'paciente', 'PACIENTE', 'Nombre', 'Name'],
-                'tratamiento': ['Tratamiento', 'Treatment', 'tratamiento', 'TRATAMIENTO', 'Servicio', 'Service'],
-                'doctor': ['Doctor', 'Médico', 'doctor', 'DOCTOR'],
-                'estado': ['Estado', 'Status', 'estado', 'ESTADO'],
-                'telefono': ['Teléfono', 'Phone', 'telefono', 'TELEFONO', 'Tel'],
-                'notas': ['Notas', 'Notes', 'notas', 'NOTAS', 'Observaciones']
+                'fecha': ['Fecha', 'Date', 'fecha', 'FECHA', 'Día', 'Dia', 'Fecha Cita', 'Fecha cita', 'Fecha de la cita'],
+                'hora': ['Hora', 'Time', 'hora', 'HORA', 'Hora Cita', 'Hora cita', 'Hora de la cita', 'Inicio', 'Start Time', 'Hora Inicio', 'Hora de Entrada'],
+                'paciente': ['Paciente', 'Patient', 'paciente', 'PACIENTE', 'Nombre', 'Name', 'Nombre y apellidos', 'Nombre completo', 'Nombre Paciente'],
+                'tratamiento': ['Tratamiento', 'Treatment', 'tratamiento', 'TRATAMIENTO', 'Servicio', 'Service', 'Motivo', 'Tipo', 'Tipo de cita', 'Servicio solicitado'],
+                'doctor': ['Doctor', 'Médico', 'doctor', 'DOCTOR', 'Odontólogo', 'Odontologo', 'Profesional', 'Doctor asignado'],
+                'estado': ['Estado', 'Status', 'estado', 'ESTADO', 'Estatus', 'Situación'],
+                'telefono': ['Teléfono', 'Phone', 'telefono', 'TELEFONO', 'Tel', 'Móvil', 'Movil', 'Celular', 'Tfno', 'Tlf', 'Teléfono 1', 'Teléfono móvil'],
+                'notas': ['Notas', 'Notes', 'notas', 'NOTAS', 'Observaciones', 'Comentario', 'Comentarios', 'Observación']
             }
             
             # Find actual column names by checking different variations
