@@ -261,7 +261,7 @@ const Agenda = () => {
                         </div>
                         
                         <div className="flex flex-col items-stretch space-y-2 ml-4">
-                          {appointment.status === 'pending' && (
+                          {appointment.status !== 'completed' && (
                             <>
                               <Button size="sm" variant="outline" className="text-green-600 hover:bg-green-50" onClick={() => handleConfirm(appointment)}>
                                 <CheckCircle className="h-4 w-4 mr-1" />Confirmar
