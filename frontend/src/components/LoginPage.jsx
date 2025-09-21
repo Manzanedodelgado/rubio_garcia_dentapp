@@ -14,6 +14,17 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Prefill stored user if Remember Me was set
+  React.useEffect(() => {
+    const savedRemember = localStorage.getItem('rememberMe') === 'true';
+    const savedUser = localStorage.getItem('rememberedUser') || '';
+    if (savedRemember && savedUser) {
+      setEmail(savedUser);
+      setRememberMe(true);
+    }
+  }, []);
+
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
