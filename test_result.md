@@ -104,15 +104,18 @@
 ## frontend:
   - task: "Calendario: etiquetas correctas (lun, mar, mié, jue, vie, sáb, dom) y semana inicia en lunes"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/components/ui/calendar.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: false
         agent: "main"
         comment: "Se añadieron formatters personalizados para evitar auto-traducciones (dom/lun/mar/mié/jue/vie/sáb)."
+      - working: true
+        agent: "testing"
+        comment: "✅ CALENDAR WORKING CORRECTLY: Visual inspection confirms Spanish day headers (lun, mar, mié, jue, vie, sáb, dom) are displayed correctly and week starts on Monday (lun). Calendar component properly configured with locale={es} and weekStartsOn={1}."
   - task: "Login: marca unificada 'Rubio García Dental' y placeholders correctos"
     implemented: true
     working: "NA"
