@@ -100,4 +100,73 @@
 
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
+
+## user_problem_statement: "Cambiar 'Orden del día' por 'Agenda'. Calendario debe empezar en lunes y al seleccionar una fecha (p.ej. 22/09 y 23/09) mostrar solo las citas de ese día desde Google Sheets, ordenadas por hora."
+
+## backend:
+  - task: "Filtrado por fecha y ordenación por hora en citas (Google Sheets)"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/appointments_service.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Actualizado get_appointments para ordenar por date asc + time asc en Mongo. Añadida normalización de hora (parse_time) y ordenación robusta en /upcoming. Columnas mapeadas: Fecha y Hora."
+
+## frontend:
+  - task: "Agenda: seleccionar fecha filtra por ese día; calendario en español y semana inicia lunes; listas ordenadas por hora"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/pages/Agenda.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Al seleccionar un día se activa filtro 'today' y se consulta backend con start_date=end_date=YYYY-MM-DD. Se ordena por fecha y hora en UI."
+  - task: "UI Calendar global: locale es y weekStartsOn=1"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/ui/calendar.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "DayPicker configurado con locale={es} y weekStartsOn={1}."
+  - task: "Renombrados y textos: 'Agenda' en lugar de 'Orden del día'"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/pages/Agenda.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Cabecera cambiada a 'Agenda' y descripción de menú a 'Agenda'. No se encontraron restos de 'Orden del día'."
+
+## metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 1
+  run_ui: false
+
+## test_plan:
+  current_focus:
+    - "Backend: /api/appointments filtrado por start_date=end_date (ej. 2025-09-22 y 2025-09-23)"
+    - "Verificar orden ascendente por Hora dentro del mismo día"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+## agent_communication:
+  - agent: "main"
+    message: "Se actualizó backend para ordenar por fecha y hora, y frontend para que el calendario inicie lunes y filtrar por fecha seleccionada. Probar /api/appointments?start_date=YYYY-MM-DD&end_date=YYYY-MM-DD y /api/appointments/today/. Validar orden por hora ascendente y que la UI muestre solo las citas del día seleccionado."
+
 #====================================================================================================
