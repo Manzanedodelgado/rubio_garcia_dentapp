@@ -56,12 +56,17 @@ export const appointmentsAPI = {
         queryParams.append(key, value);
       }
     });
+
+    // Add an explicit high limit to avoid server default truncation
+    if (!queryParams.has('limit')) {
+      queryParams.set('limit', '5000');
+    }
     
     const queryString = queryParams.toString();
     const url = queryString ? `/appointments/?${queryString}` : '/appointments/';
     
     console.log('Making API request to:', url);
-    return apiClient.get(url);
+    return apiClient.get(url, { timeout: 20000 }); // extend timeout for large payloads
   },
 
   // Get today's appointments
