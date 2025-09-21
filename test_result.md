@@ -196,15 +196,18 @@
         comment: "✅ AGENDA FULLY FUNCTIONAL: Date selection works correctly, calendar in Spanish with Monday start confirmed, all filter buttons working, sync functionality operational with proper toast notifications, navigation to Nueva Cita and Historial successful with forms present."
   - task: "UI Calendar global: locale es y weekStartsOn=1"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/components/ui/calendar.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: false
         agent: "main"
         comment: "DayPicker configurado con locale={es} y weekStartsOn={1}."
+      - working: true
+        agent: "testing"
+        comment: "✅ CALENDAR CONFIGURATION CORRECT: DayPicker properly configured with locale={es} and weekStartsOn={1}. Visual confirmation shows Spanish day headers (lun, mar, mié, jue, vie, sáb, dom) and Monday as first day of week."
   - task: "Renombrados y textos: 'Agenda' en lugar de 'Orden del día'"
     implemented: true
     working: "NA"
