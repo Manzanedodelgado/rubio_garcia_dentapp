@@ -62,6 +62,7 @@ class SyncResult(BaseModel):
 class GoogleSheetsService:
     def __init__(self, db_client: AsyncIOMotorClient):
         self.db = db_client[os.environ['DB_NAME']]
+        self.overrides = self.db.get_collection('appointment_overrides')
         # Use the public CSV export URL for the Google Sheets
         self.sheet_url = "https://docs.google.com/spreadsheets/d/1MBDBHQ08XGuf5LxVHCFhHDagIazFkpBnxwqyEQIBJrQ/export?format=csv&gid=0"
         self.fallback_sheet_url = "https://docs.google.com/spreadsheets/d/1MBDBHQ08XGuf5LxVHCFhHDagIazFkpBnxwqyEQIBJrQ/export?format=csv"
