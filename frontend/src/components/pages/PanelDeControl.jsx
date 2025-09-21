@@ -147,11 +147,11 @@ const PanelDeControl = () => {
               <div className="flex items-center gap-2">
                 <Database className="h-4 w-4 text-blue-600" />
                 <span className="text-sm font-medium text-blue-900">
-                  Google Sheets sincronizado
+                  {syncStatus.auto_sync_active ? 'Sincronización: ACTIVA' : 'Sincronización: INACTIVA'}
                 </span>
               </div>
               <span className="text-xs text-blue-700">
-                {formatLastUpdate(syncStatus.last_update)}
+                Última: {syncStatus.last_update ? formatLastUpdate(syncStatus.last_update) : 'Nunca'}
               </span>
             </div>
           </CardContent>
