@@ -129,23 +129,35 @@ const LoginPage = () => {
             </div>
           </div>
 
-          {/* Forgot Password & Login Button */}
+          {/* Remember Me + Forgot + Login */}
           <div className="flex items-center justify-between">
-            <button
-              type="button"
-              onClick={handleForgotPassword}
-              className="text-blue-600 hover:text-blue-700 text-sm underline transition-colors"
-            >
-              ¿Olvidaste tu contraseña?
-            </button>
-            
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className="bg-slate-700 hover:bg-slate-800 text-white px-8 py-2 rounded-lg transition-colors"
-            >
-              {isLoading ? "Ingresando..." : "Ingresar"}
-            </Button>
+            <label className="flex items-center gap-2 text-sm text-slate-700">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="h-4 w-4 border-slate-300 rounded"
+              />
+              Recordar usuario
+            </label>
+
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                className="text-blue-600 hover:text-blue-700 text-sm underline transition-colors"
+              >
+                ¿Olvidaste tu contraseña?
+              </button>
+              
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="bg-slate-700 hover:bg-slate-800 text-white px-8 py-2 rounded-lg transition-colors"
+              >
+                {isLoading ? "Ingresando..." : "Ingresar"}
+              </Button>
+            </div>
           </div>
         </form>
         
