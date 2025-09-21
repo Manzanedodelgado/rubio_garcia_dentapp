@@ -85,6 +85,15 @@ class GoogleSheetsService:
     def parse_csv_data(self, csv_content: str) -> List[Dict]:
         """Parse CSV content and map to appointment structure"""
         appointments = []
+        reader = csv.reader(csv_content.splitlines())
+        rows = list(reader)
+        if not rows:
+            self.last_headers = []
+            self.last_raw_rows = 0
+            return []
+        headers = rows[0]
+        self.last_headers = headers
+        self.last_raw_rows = len(rows) - 1
         csv_reader = csv.DictReader(csv_content.splitlines())
         
         for row in csv_reader:
