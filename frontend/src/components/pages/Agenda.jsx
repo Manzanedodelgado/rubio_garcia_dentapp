@@ -3,7 +3,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { Calendar } from "../ui/calendar";
-import { es } from 'date-fns/locale';
 import { 
   Calendar as CalendarIcon, 
   Clock, 
@@ -15,7 +14,8 @@ import {
   RefreshCw,
   Database,
   Users,
-  AlertCircle
+  AlertCircle,
+  XCircle
 } from "lucide-react";
 import { appointmentsAPI } from "../../services/apiService";
 import { toast } from "../../hooks/use-toast";
@@ -38,12 +38,9 @@ const Agenda = () => {
     setError(null);
 
     try {
-      console.log('Fetching appointments with filters:', filters);
       const response = await appointmentsAPI.getAll(filters);
-      console.log('Appointments response:', response.data);
       setAppointments(response.data || []);
     } catch (err) {
-      console.error('Error fetching appointments:', err);
       const errorMessage = err.response?.data?.detail || err.message || 'Error fetching appointments';
       setError(errorMessage);
       setAppointments([]);
@@ -156,13 +153,13 @@ const Agenda = () => {
     return (
       apt.patient_name?.toLowerCase().includes(searchLower) ||
       apt.treatment?.toLowerCase().includes(searchLower) ||
-      apt.doctor?.toLowerCase().includes(searchLower)
+      apt.doctor?.toLowerCase().includes(searchLower) ||
+      (apt.num_paciente || '').toLowerCase().includes(searchLower)
     );
   });
 
-  // Filter appointments by selected date if needed
+  // Sorting for display
   const normalizeTime = (t) => (t || '').padStart(5, '0');
-
   const displayAppointments = (filter === 'today' 
     ? filteredAppointments.filter(apt => apt.date === toLocalYMD(selectedDate))
     : filteredAppointments)
@@ -172,6 +169,14 @@ const Agenda = () => {
       if (dateA === dateB) return normalizeTime(a.time).localeCompare(normalizeTime(b.time));
       return dateA.localeCompare(dateB);
     });
+
+  const handleConfirm = (appointment) => {
+    toast({ title: "Confirmar", description: `Confirmar cita de ${appointment.patient_name} a las ${appointment.time}` });
+  };
+
+  const handleCancel = (appointment) => {
+    toast({ title: "Cancelar", description: `Cancelar cita de ${appointment.patient_name} a las ${appointment.time}` , variant: 'destructive'});
+  };
 
   return (
     <div className="space-y-6">
@@ -392,6 +397,11 @@ const Agenda = () => {
                               <div>
                                 <strong>Doctor:</strong> {appointment.doctor || 'No asignado'}
                               </div>
+                              {appointment.num_paciente && (
+                                <div>
+                                  <strong>Número de Paciente:</strong> {appointment.num_paciente}
+                                </div>
+                              )}
                               {appointment.phone && (
                                 <div>
                                   <strong>Teléfono:</strong> {appointment.phone}
@@ -410,12 +420,18 @@ const Agenda = () => {
                           </div>
                         </div>
                         
-                        <div className="flex items-center space-x-2 ml-4">
+                        <div className="flex flex-col items-stretch space-y-2 ml-4">
                           {appointment.status === 'pending' && (
-                            <Button size="sm" variant="outline" className="text-green-600 hover:bg-green-50">
-                              <CheckCircle className="h-4 w-4 mr-1" />
-                              Confirmar
-                            </Button>
+                            <>
+                              <Button size="sm" variant="outline" className="text-green-600 hover:bg-green-50" onClick={() => handleConfirm(appointment)}>
+                                <CheckCircle className="h-4 w-4 mr-1" />
+                                Confirmar
+                              </Button>
+                              <Button size="sm" variant="outline" className="text-red-600 hover:bg-red-50" onClick={() => handleCancel(appointment)}>
+                                <XCircle className="h-4 w-4 mr-1" />
+                                Cancelar
+                              </Button>
+                            </>
                           )}
                           <Button size="sm" variant="outline">
                             <Edit className="h-4 w-4" />

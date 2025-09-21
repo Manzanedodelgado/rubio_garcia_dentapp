@@ -23,6 +23,13 @@ class AppointmentBase(BaseModel):
     status: str = "pending"  # pending, confirmed, completed, cancelled, rescheduled
     phone: str = ""
     notes: str = ""
+    # Extended fields from Google Sheets
+    num_paciente: Optional[str] = ""
+    last_name: Optional[str] = ""
+    registro: Optional[str] = ""
+    cit_mod: Optional[str] = ""
+    fecha_alta: Optional[str] = ""
+    duration: Optional[str] = ""
     source: str = "google_sheets"
 
 class Appointment(AppointmentBase):
@@ -131,9 +138,6 @@ class GoogleSheetsService:
         # Try to coerce simple cases like "9:0" -> 09:00
         parts = cleaned.replace(".", ":").split(":")
         if len(parts) >= 2 and parts[0].isdigit() and parts[1].isdigit():
-            # Log header mapping for diagnostics
-            logger.info(f"Google Sheets headers detected: {self.last_headers}")
-
             hh = parts[0].zfill(2)
             mm = parts[1].zfill(2)
             return f"{hh}:{mm}"
@@ -146,12 +150,18 @@ class GoogleSheetsService:
             column_mappings = {
                 'fecha': ['Fecha', 'Date', 'fecha', 'FECHA', 'Día', 'Dia', 'Fecha Cita', 'Fecha cita', 'Fecha de la cita'],
                 'hora': ['Hora', 'Time', 'hora', 'HORA', 'Hora Cita', 'Hora cita', 'Hora de la cita', 'Inicio', 'Start Time', 'Hora Inicio', 'Hora de Entrada'],
-                'paciente': ['Paciente', 'Patient', 'paciente', 'PACIENTE', 'Nombre', 'Name', 'Nombre y apellidos', 'Nombre completo', 'Nombre Paciente'],
+                'nombre': ['Nombre', 'Name', 'Nombre Paciente', 'Nombre completo'],
+                'apellidos': ['Apellidos'],
+                'num_pac': ['NumPac', 'Nº Paciente', 'NumeroPaciente', 'Número Paciente'],
                 'tratamiento': ['Tratamiento', 'Treatment', 'tratamiento', 'TRATAMIENTO', 'Servicio', 'Service', 'Motivo', 'Tipo', 'Tipo de cita', 'Servicio solicitado'],
-                'doctor': ['Doctor', 'Médico', 'doctor', 'DOCTOR', 'Odontólogo', 'Odontologo', 'Profesional', 'Doctor asignado'],
-                'estado': ['Estado', 'Status', 'estado', 'ESTADO', 'Estatus', 'Situación'],
-                'telefono': ['Teléfono', 'Phone', 'telefono', 'TELEFONO', 'Tel', 'Móvil', 'Movil', 'Celular', 'Tfno', 'Tlf', 'Teléfono 1', 'Teléfono móvil'],
-                'notas': ['Notas', 'Notes', 'notas', 'NOTAS', 'Observaciones', 'Comentario', 'Comentarios', 'Observación']
+                'doctor': ['Doctor', 'Médico', 'doctor', 'DOCTOR', 'Odontólogo', 'Odontologo', 'Profesional', 'Doctor asignado', 'Odontologo'],
+                'estado': ['Estado', 'Status', 'estado', 'ESTADO', 'Estatus', 'Situación', 'EstadoCita'],
+                'telefono': ['Teléfono', 'Phone', 'telefono', 'TELEFONO', 'Tel', 'Móvil', 'Movil', 'Celular', 'Tfno', 'Tlf', 'Teléfono 1', 'Teléfono móvil', 'TelMovil'],
+                'notas': ['Notas', 'Notes', 'notas', 'NOTAS', 'Observaciones', 'Comentario', 'Comentarios', 'Observación'],
+                'registro': ['Registro'],
+                'citmod': ['CitMod'],
+                'fecha_alta': ['FechaAlta'],
+                'duracion': ['Duracion']
             }
             
             # Find actual column names by checking different variations
@@ -159,30 +169,44 @@ class GoogleSheetsService:
             for field, possible_names in column_mappings.items():
                 value = None
                 for name in possible_names:
-                    if name in row and row[name] and row[name].strip():
-                        value = row[name].strip()
+                    if name in row and row[name] and str(row[name]).strip():
+                        value = str(row[name]).strip()
                         break
                 mapped_data[field] = value or ""
             
             # Skip empty rows
-            if not any([mapped_data.get('paciente'), mapped_data.get('fecha'), mapped_data.get('hora')]):
+            if not any([mapped_data.get('nombre'), mapped_data.get('apellidos'), mapped_data.get('fecha'), mapped_data.get('hora')]):
                 return None
+            
+            # Build full patient name
+            full_name = " ".join([x for x in [mapped_data.get('nombre', ''), mapped_data.get('apellidos', '')] if x]).strip()
+            if not full_name:
+                full_name = mapped_data.get('nombre', '') or mapped_data.get('apellidos', '')
             
             # Parse and format data
             appointment = {
-                'external_id': f"{mapped_data.get('fecha', '')}_{mapped_data.get('hora', '')}_{mapped_data.get('paciente', '')}".replace(' ', '_'),
+                'external_id': f"{mapped_data.get('fecha', '')}_{mapped_data.get('hora', '')}_{full_name}".replace(' ', '_'),
                 'date': self.parse_date(mapped_data.get('fecha', '')),
                 'time': self.parse_time(mapped_data.get('hora', '')),
-                'patient_name': mapped_data.get('paciente', ''),
+                'patient_name': full_name,
+                'last_name': mapped_data.get('apellidos', ''),
                 'treatment': mapped_data.get('tratamiento', ''),
                 'doctor': mapped_data.get('doctor', ''),
                 'status': self.parse_status(mapped_data.get('estado', '')),
                 'phone': mapped_data.get('telefono', ''),
                 'notes': mapped_data.get('notas', ''),
+                'num_paciente': mapped_data.get('num_pac', ''),
+                'registro': mapped_data.get('registro', ''),
+                'cit_mod': mapped_data.get('citmod', ''),
+                'fecha_alta': mapped_data.get('fecha_alta', ''),
+                'duration': mapped_data.get('duracion', ''),
                 'created_at': datetime.utcnow(),
                 'updated_at': datetime.utcnow(),
                 'source': 'google_sheets'
             }
+            
+            # Log header mapping for diagnostics
+            logger.info(f"Google Sheets headers detected: {self.last_headers}")
             
             return appointment
             
