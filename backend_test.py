@@ -7,6 +7,7 @@ Tests appointment filtering, ordering, and all endpoints
 import requests
 import json
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 import sys
 import os
 
