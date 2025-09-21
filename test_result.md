@@ -118,15 +118,18 @@
         comment: "✅ CALENDAR WORKING CORRECTLY: Visual inspection confirms Spanish day headers (lun, mar, mié, jue, vie, sáb, dom) are displayed correctly and week starts on Monday (lun). Calendar component properly configured with locale={es} and weekStartsOn={1}."
   - task: "Login: marca unificada 'Rubio García Dental' y placeholders correctos"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/components/LoginPage.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: false
         agent: "main"
         comment: "Se centralizó marca con constantes y se cambió el placeholder a 'Usuario o correo electrónico'."
+      - working: true
+        agent: "testing"
+        comment: "✅ LOGIN WORKING PERFECTLY: Branding shows 'Rubio García Dental' correctly, placeholder shows 'Usuario o correo electrónico', login with admin@rubiogarcia.com/dental123 successful, redirects to /panel-de-control without errors."
   - task: "Agenda: seleccionar fecha filtra por ese día y ordena por hora"
     implemented: true
     working: "NA"
